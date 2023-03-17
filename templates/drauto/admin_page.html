@@ -7,8 +7,8 @@
 {% include 'drauto/navbar.html' %}
 
 <h3>Sales By Salespeople</h3>
-<table>
-  <thead>
+<table class="table">
+  <thead class="thead-dark">
     <tr>
       <th>Employee ID</th>
       <th>Salesman</th>
@@ -42,8 +42,9 @@
   </tbody>
 </table>
 
-<table>
-  <thead>
+<h3>Commission Made By Each Sales Employee</h3>
+<table class="table">
+  <thead class="thead-dark">
     <tr>
       <th>Employee ID</th>
       <th>Salesman</th>
@@ -55,7 +56,7 @@
       <th>Date Sold</th>
     </tr>
   </thead>
-  <tbody>
+  <tbody >
     {% for commission in commission_list %}
       <tr>
         <td>{{ commission.0 }}</td>
@@ -71,8 +72,9 @@
   </tbody>
 </table>
 
-<table>
-  <thead>
+<h3>Vehicles Bought By Client</h3>
+<table class="table">
+  <thead class="thead-dark">
     <tr>
       <th>Client</th>
       <th>Make</th>
@@ -100,9 +102,9 @@
   </tbody>
 </table>
 
-
-<table>
-  <thead>
+<h3>Vehicles Bought By Employee</h3>
+<table class="table">
+  <thead class="thead-dark">
     <tr>
       <th>Salesman Name</th>
       <th>Vehicle Make</th>
@@ -128,8 +130,9 @@
   </tbody>
 </table>
 
-<table>
-  <thead>
+<h3>View All Invoices</h3>
+<table class="table">
+  <thead class="thead-dark">
     <tr>
       <th>Invoice Number</th>
       <th>Invoice Date</th>

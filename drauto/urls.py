@@ -17,5 +17,6 @@ urlpatterns = [
     path('vehicle/purchase/<str:vehicle_id>/', views.purchase, name='purchase'),
     # path('vehicle/purchase/<str:')
 
-    path('admin_page/',views.admin_views,name='admin_page')
+    path('admin_views/',views.admin_views,name='admin_views'),
+    path('admin_control/',views.admin_control,name='admin_control'),
 ]

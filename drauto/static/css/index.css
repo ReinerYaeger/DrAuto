@@ -1,22 +1,21 @@
-*{
-    padding:0;
-    margin:0;
-    box-sizing:border-box;
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
     text-decoration: none;
 }
 
-:root{
+:root {
     --bg-color: #FFA826;
     --text-color: #000000;
     --main-color: #FFFFFF;
 }
 
-body{
+body {
     min-height: 100vh;
     background: var(--main-color);
     color: var(--text-color);
 }
-
 
 
 /*  position: fixed;
@@ -24,7 +23,7 @@ body{
     top: 0;
     right: 0;
 */
-header{
+header {
     width: 100%;
     z-index: 1000;
     display: flex;
@@ -37,25 +36,25 @@ header{
     background: var(--bg-color);
 }
 
-.logo{
+.logo {
     display: flex;
     align-items: center;
 }
 
 /* change color of logo icon here*/
-.logo i{
+.logo i {
     color: var(--main-color);
     font-size: 28px;
     margin-right: 3px;
 }
 
-.logo span{
+.logo span {
     color: var(--text-color);
     font-size: 1.5rem;
     font-weight: 600;
 }
 
-.navbar{
+.navbar {
     display: flex;
     list-style: none;
 }
@@ -67,6 +66,7 @@ header{
     padding: 5px 0;
     margin: 0 30px;
     transition: all .50s ease;
+    text-decoration: none; /* remove underline from links */
 }
 
 .navbar a:hover{
@@ -89,6 +89,7 @@ header{
     font-size: 0.95rem;
     font-weight: 500;
     transition: all .50s ease;
+    text-decoration: none; /* remove underline from links */
 }
 
 .main a:hover{
@@ -96,7 +97,7 @@ header{
 }
 
 /*not display menu icon unless screen size decreases*/
-#menu-icon{
+#menu-icon {
     font-size: 35px;
     color: var(--main-color);
     cursor: pointer;
@@ -104,30 +105,30 @@ header{
     display: none;
 }
 
-.user{
+.user {
     display: flex;
     align-items: center;
 }
 
-.user i{
+.user i {
     color: var(--main-color);
     font-size: 28px;
     margin-right: 7px;
 }
 
-.cont-about{
+.cont-about {
     background-color: var(--bg-color);
 }
 
-.cont-about{
+.cont-about {
     display: flex;
 }
 
-h2{
+h2 {
     color: var(--text-color);
 }
 
-.desc{
+.desc {
     text-align: right;
 }
 
@@ -143,13 +144,13 @@ h2{
     box-shadow: 3px 3px 7px 0px rgba(61, 61, 61, 0.8);
     transition: background-color 0.3s ease;
 }
-  
+
 .btn:hover {
     background-color: #3e8e41;
 }
 
 /*Services design*/
-.services{
+.services {
     font-family: 'raleway';
     display: flex;
     justify-content: center;
@@ -158,15 +159,15 @@ h2{
     background: #fafafa;
 }
 
-.content-box{
+.content-box {
     display: flex;
     justify-content: space-between;
-    
+
     width: 100%;
     margin-top: 30px;
 }
-  
-.card{
+
+.card {
     min-height: 220px;
     width: 30%;
     padding: 30px;
@@ -181,24 +182,25 @@ h2{
     transition: all .50s ease;
 }
 
-.card i{
+.card i {
     margin: 20px;
     color: var(--bg-color);
 }
 
-.card h2{
+.card h2 {
     color: var(--bg-color);
 }
 
-.card h3{
+.card h3 {
     margin-bottom: 12px;
     font-weight: 400;
 }
 
-.card p{
+.card p {
     color: #6c757d;
     text-align: center;
 }
+
 /*
 .card:hover i, .card:hover p{
     color:#FFFFFF;
@@ -231,24 +233,24 @@ h2{
     background-size: cover;
 }*/
 
-@media (max-width: 1280px){
-    header{
+@media (max-width: 1280px) {
+    header {
         padding: 14px 2%;
         transition: .2s;
     }
 
-    .navbar a{
+    .navbar a {
         padding: 5px 0;
         margin: 0px 20px;
     }
 }
 
-@media (max-width: 991px){
-    #menu-icon{
+@media (max-width: 991px) {
+    #menu-icon {
         display: block;
     }
 
-    .navbar{
+    .navbar {
         position: absolute;
         top: 100%;
         right: -100%;
@@ -261,41 +263,41 @@ h2{
         transition: all .50s ease;
     }
 
-    .navbar a{
+    .navbar a {
         display: block;
         margin: 12px 0;
         padding: 0 25px;
         transition: all .50s ease;
     }
 
-    .navbar a:hover{
+    .navbar a:hover {
         color: var(--text-color);
         transition: all .50s ease;
     }
 
-    .navbar a:active{
+    .navbar a:active {
         color: var(--text-color);
     }
 
-    .navbar.open{
+    .navbar.open {
         right: 2%;
     }
 
-    .services{
+    .services {
         padding: 25px;
     }
 
-    .services h3{
+    .services h3 {
         font-size: 1.5em;
         font-weight: 600;
     }
 
-    .content-box{
+    .content-box {
         flex-direction: column;
     }
 
-    .card{
-        min-width:60%;
+    .card {
+        min-width: 60%;
         margin: 10px auto;
     }
 }

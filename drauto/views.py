@@ -168,4 +168,53 @@ def client_purchase(requests):
         invoice_list = cursor.fetchall()
 
     context = {'invoice': invoice_list}
-    return render(requests, 'drauto/client_purchase_page.html', context)
+    return render(requests, 'drauto/client_purchase.html', context)
+
+
+def admin_control(requests):
+    with connection.cursor() as cursor:
+        cursor.execute(
+            "Select *, emergency_contact_number  From Employee INNER JOIN Emergency_Contact EC on EC.emp_id = Employee.emp_id ")
+        employee_list = cursor.fetchall()
+
+        cursor.execute(
+            "SELECT *, EC.emergency_contact_number FROM Mechanic INNER JOIN Emergency_Contact EC ON EC.emp_id = Mechanic.emp_id")
+        mechanic_list = cursor.fetchall()
+
+        cursor.execute(
+            "SELECT *, EC.emergency_contact_number FROM Salesman INNER JOIN Emergency_Contact EC ON EC.emp_id = Salesman.emp_id")
+        salesman_list = cursor.fetchall()
+
+        cursor.execute(
+            "SELECT *, EC.emergency_contact_number FROM Admin_Personnel INNER JOIN Emergency_Contact EC ON EC.emp_id = Admin_Personnel.emp_id")
+        admin_list = cursor.fetchall()
+
+        cursor.execute(
+            "SELECT *, EC.emergency_contact_number FROM Supervisor INNER JOIN Emergency_Contact EC ON EC.emp_id = Supervisor.emp_id")
+        supervisor_list = cursor.fetchall()
+
+        cursor.execute("SELECT * from Vehicle")
+        vehicle_list = cursor.fetchall()
+
+        cursor.execute("SELECT * from Van")
+        van_list = cursor.fetchall()
+
+        cursor.execute("SELECT * from Car")
+        car_list = cursor.fetchall()
+
+        cursor.execute("SELECT * from Four_WD")
+        fourWD_list = cursor.fetchall()
+
+    if requests.method == 'POST':
+        print('Post')
+
+    context = {'employee_list': employee_list,
+               'mechanic_list': mechanic_list,
+               'admin_list': admin_list,
+               'salesman_list': salesman_list,
+               'supervisor_list': supervisor_list,
+               'vehicle_list': vehicle_list,
+               'van_list': van_list,
+               'car_list': car_list,
+               'fourWD_list': fourWD_list, }
+    return render(requests, 'drauto/admin_control.html', context)
