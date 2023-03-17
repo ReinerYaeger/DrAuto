@@ -134,14 +134,16 @@
 <table class="table table-striped">
     <thead class="thead-dark">
     <tr>
-        <th>Invoice Number</th>
+        <th>Employee Name</th>
         <th>Client Name</th>
-        <th>Invoice Date</th>
-
+        <th>Date Bought</th>
         <th>Vehicle Make</th>
         <th>Vehicle Model</th>
-        <th>Year</th>
-        <th>Invoice Amount</th>
+        <th>Car Year</th>
+{#        <th>Condition</th>#}
+        <th>Mileage</th>
+        <th>Price</th>
+        <th>Amount Paid</th>
     </tr>
     </thead>
     <tbody>
@@ -153,7 +155,9 @@
             <td>{{ invoice.3 }}</td>
             <td>{{ invoice.4 }}</td>
             <td>{{ invoice.5 }}</td>
-            <td>{{ invoice.6 }}</td>
+            <td>{{ invoice.8 }}</td>
+            <td>{{ invoice.9 }}</td>
+            <td>{{ invoice.10 }}</td>
         </tr>
     {% endfor %}
     </tbody>

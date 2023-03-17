@@ -248,3 +248,12 @@ def admin_control_employee(requests):
                'fourWD_list': fourWD_list,
                'emp_id': emp_id}
     return render(requests, 'drauto/admin_control_employee.html', context)
+
+
+def admin_control_vehicle(requests):
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM DrautoshopAddb.dbo.Vehicle")
+        vehicle_list = cursor.fetchall()
+
+    context = {'vehicle_list': vehicle_list}
+    return render(requests, 'drauto/admin_control_vehicle.html', context)

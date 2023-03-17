@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Admin Control</title>
+</head>
+<body>
+{% include 'drauto/navbar.html' %}
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Chassis Number</th>
+        <th>Make</th>
+        <th>Import Price (USD)</th>
+        <th>Year</th>
+        <th>Markup Percent</th>
+        <th>Colour</th>
+        <th>Engine Number</th>
+        <th>Model</th>
+        <th>Type</th>
+        <th>Condition</th>
+        <th>Mileage</th>
+        <th>CC Rating</th>
+        <th>Sold</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for vehicle in vehicle_list %}
+        <tr>
+            <td>{{ vehicle.0 }}</td>
+            <td>{{ vehicle.1 }}</td>
+            <td>{{ vehicle.2 }}</td>
+            <td>{{ vehicle.3 }}</td>
+            <td>{{ vehicle.4 }}</td>
+            <td>{{ vehicle.5 }}</td>
+            <td>{{ vehicle.6 }}</td>
+            <td>{{ vehicle.7 }}</td>
+            <td>{{ vehicle.8 }}</td>
+            <td>{{ vehicle.9 }}</td>
+            <td>{{ vehicle.10 }}</td>
+            <td>{{ vehicle.11 }}</td>
+            <td>{{ vehicle.12 }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+
+</body>
+</html>

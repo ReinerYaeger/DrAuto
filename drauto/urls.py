@@ -20,6 +20,7 @@ urlpatterns = [
     path('admin_views/',views.admin_views,name='admin_views'),
     path('admin_control/', views.admin_control_employee, name='admin_control'),
     path('admin_control/employee', views.admin_control_employee, name='admin_control_employee'),
+    path('admin_control/vehicle', views.admin_control_vehicle, name='admin_control_vehicle'),
 
     #path('admin_control/update_employee/<str:emp_id>', views.update_employee, name='update_employee'),
 
