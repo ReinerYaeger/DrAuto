@@ -159,11 +159,27 @@ def contact(requests):
 
 
 def admin_views(requests):
-
     with connection.cursor() as cursor:
         cursor.execute("Select * From view_sales_by_salesman")
         sales_list = cursor.fetchall()
 
+        cursor.execute("Select * From view_commision_made_on_purchases")
+        commission_list = cursor.fetchall()
 
-    context = {'sales_list': sales_list}
+        cursor.execute("Select * From view_vehciles_bought_by_client")
+        client_purchase_list = cursor.fetchall()
+
+        cursor.execute("Select * From view_vehicles_bought_by_salesman")
+        salesman_purchase_list = cursor.fetchall()
+
+        cursor.execute("Select * From view_invoice")
+        invoice_list = cursor.fetchall()
+
+
+
+    context = {'sales_list': sales_list,
+               'commission_list': commission_list,
+               'client_purchase_list':client_purchase_list,
+               'salesman_purchase_list': salesman_purchase_list,
+               'invoice_list':invoice_list,}
     return render(requests, 'drauto/admin_page.html', context)
