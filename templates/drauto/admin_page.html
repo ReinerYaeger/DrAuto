@@ -42,8 +42,118 @@
   </tbody>
 </table>
 
+<table>
+  <thead>
+    <tr>
+      <th>Employee ID</th>
+      <th>Salesman</th>
+      <th>Make</th>
+      <th>Model</th>
+      <th>Car Type</th>
+      <th>Car Year</th>
+      <th>Commission</th>
+      <th>Date Sold</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for commission in commission_list %}
+      <tr>
+        <td>{{ commission.0 }}</td>
+        <td>{{ commission.1 }}</td>
+        <td>{{ commission.2 }}</td>
+        <td>{{ commission.3 }}</td>
+        <td>{{ commission.4 }}</td>
+        <td>{{ commission.5 }}</td>
+        <td>{{ commission.6 }}</td>
+        <td>{{ commission.7 }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr>
+      <th>Client</th>
+      <th>Make</th>
+      <th>Model</th>
+      <th>Car Type</th>
+      <th>Car Year</th>
+      <th>Condition</th>
+      <th>Mileage</th>
+      <th>Date Bought</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for purchase in client_purchase_list %}
+    <tr>
+      <td>{{ purchase.0 }}</td>
+      <td>{{ purchase.1 }}</td>
+      <td>{{ purchase.2 }}</td>
+      <td>{{ purchase.3 }}</td>
+      <td>{{ purchase.4 }}</td>
+      <td>{{ purchase.5 }}</td>
+      <td>{{ purchase.6 }}</td>
+      <td>{{ purchase.7 }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 
 
+<table>
+  <thead>
+    <tr>
+      <th>Salesman Name</th>
+      <th>Vehicle Make</th>
+      <th>Vehicle Model</th>
+      <th>Year</th>
+      <th>Invoice Number</th>
+      <th>Invoice Date</th>
+      <th>Invoice Amount</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for purchase in salesman_purchase_list %}
+      <tr>
+        <td>{{ purchase.0}}</td>
+        <td>{{ purchase.1}}</td>
+        <td>{{ purchase.2}}</td>
+        <td>{{ purchase.3}}</td>
+        <td>{{ purchase.4}}</td>
+        <td>{{ purchase.5}}</td>
+        <td>{{ purchase.6}}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr>
+      <th>Invoice Number</th>
+      <th>Invoice Date</th>
+      <th>Client Name</th>
+      <th>Vehicle Make</th>
+      <th>Vehicle Model</th>
+      <th>Year</th>
+      <th>Invoice Amount</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for invoice in invoice_list %}
+      <tr>
+        <td>{{ invoice.0}}</td>
+        <td>{{ invoice.1}}</td>
+        <td>{{ invoice.2}}</td>
+        <td>{{ invoice.3}}</td>
+        <td>{{ invoice.4}}</td>
+        <td>{{ invoice.5}}</td>
+        <td>{{ invoice.6}}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
 
 
 

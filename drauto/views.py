@@ -4,7 +4,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.db import connection
 
-from drauto.backend_functions import generate_cl_string, findASalesPerson, findClient
+from drauto.backend_functions import generate_cl_string, findASalesPerson, findClient, getDiscountPrice, getPrice
 from drauto.forms import EmployeeLoginForm
 
 # Create your views here.
@@ -129,31 +129,6 @@ def purchase(requests, vehicle_id):
     return render(requests, 'drauto/purchase.html', context)
 
 
-def log_payment(requests):
-    with connection.cursor() as cursor:
-        cursor.execute("INSERT INTO DrautoshopAddb.dbo.Client_Purchase ()")
-        vehicle_list = cursor.fetchall()
-        context = {
-            'vehicle_list': vehicle_list,
-        }
-
-
-def getPrice(chassis_number):
-    # cursor.execute("SELECT DrautoshopAddb.dbo.GET_VEHICLES_SELL_PRICE() WHERE chassis_number = '{chassis_number}'")
-    cursor.execute(
-        f"SELECT Selling_Price FROM DrautoshopAddb.dbo.GET_VEHICLE_SELL_PRICE() WHERE chassis_number = '{chassis_number}'")
-    data = cursor.fetchall()
-
-    return data[0][0]
-
-
-def getDiscountPrice(chassis_number):
-    cursor.execute("SELECT DrautoshopAddb.dbo.GET_DISCOUNT('{chassis_number}')")
-    data = cursor.fetchall()
-
-    return data[0][0]
-
-
 def contact(requests):
     return render(requests, 'drauto/contact_page.html')
 
@@ -175,11 +150,22 @@ def admin_views(requests):
         cursor.execute("Select * From view_invoice")
         invoice_list = cursor.fetchall()
 
-
-
     context = {'sales_list': sales_list,
                'commission_list': commission_list,
-               'client_purchase_list':client_purchase_list,
+               'client_purchase_list': client_purchase_list,
                'salesman_purchase_list': salesman_purchase_list,
-               'invoice_list':invoice_list,}
+               'invoice_list': invoice_list, }
     return render(requests, 'drauto/admin_page.html', context)
+
+
+def services(requests):
+    return render(requests, 'drauto/services.html')
+
+
+def client_purchase(requests):
+    with connection.cursor() as cursor:
+        cursor.execute("Select * From view_invoice Where Client = '{client_name}'")
+        invoice_list = cursor.fetchall()
+
+    context = {'invoice': invoice_list}
+    return render(requests, 'drauto/client_purchase_page.html', context)

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% include 'drauto/navbar.html' %}
+
+<h3> Here are all your Previous Purchases</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Salesman Name</th>
+      <th>Vehicle Make</th>
+      <th>Vehicle Model</th>
+      <th>Year</th>
+      <th>Invoice Number</th>
+      <th>Invoice Date</th>
+      <th>Invoice Amount</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for purchase in invoice_list %}
+      <tr>
+        <td>{{ purchase.0}}</td>
+        <td>{{ purchase.1}}</td>
+        <td>{{ purchase.2}}</td>
+        <td>{{ purchase.3}}</td>
+        <td>{{ purchase.4}}</td>
+        <td>{{ purchase.5}}</td>
+        <td>{{ purchase.6}}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</body>
+</html>

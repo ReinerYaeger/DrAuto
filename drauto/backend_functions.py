@@ -21,6 +21,7 @@ def findASalesPerson(emp_id=None):
             connection.commit()
             return cursor.fetchone()[0]
 
+
 def findClient(client_name):
     with connection.cursor() as cursor:
         cursor.execute(f"SELECT client_id FROM Client WHERE client_name = '{client_name}'")
@@ -28,3 +29,17 @@ def findClient(client_name):
         return cursor.fetchone()[0]
 
 
+def getPrice(chassis_number):
+    # cursor.execute("SELECT DrautoshopAddb.dbo.GET_VEHICLES_SELL_PRICE() WHERE chassis_number = '{chassis_number}'")
+    cursor.execute(
+        f"SELECT Selling_Price FROM DrautoshopAddb.dbo.GET_VEHICLE_SELL_PRICE() WHERE chassis_number = '{chassis_number}'")
+    data = cursor.fetchall()
+
+    return data[0][0]
+
+
+def getDiscountPrice(chassis_number):
+    cursor.execute("SELECT DrautoshopAddb.dbo.GET_DISCOUNT('{chassis_number}')")
+    data = cursor.fetchall()
+
+    return data[0][0]
