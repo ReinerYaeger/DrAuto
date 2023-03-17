@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Admin Control</title>
+</head>
+<body>
+{% include 'drauto/navbar.html' %}
+
+<h3>Employees</h3>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Employee ID</th>
+        <th>Employee Name</th>
+        <th>Date Employed</th>
+        <th>Date of Birth</th>
+        <th>Age</th>
+        <th>Emergency Contact Number</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for emp in employee_list %}
+        <tr>
+            <td>{{ emp.0 }}</td>
+            <td>{{ emp.1 }}</td>
+            <td>{{ emp.2 }}</td>
+            <td>{{ emp.3 }}</td>
+            <td>{{ emp.5 }}</td>
+            <td>{{ emp.6 }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<form method="POST" action="{% url 'admin_control' %}">
+    {% csrf_token %}
+    <div class="form-group">
+        <input type="text" required name="employee_id" placeholder="Employee Id">
+        <input required name="emergency_contact_number" placeholder="Emergency Contact Number">
+        <button class="btn btn-primary" name="employee_update" type="submit" value="Update">Update</button>
+    </div>
+</form>
+
+
+<h3>Mechanic</h3>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Employee ID</th>
+        <th>Salary</th>
+        <th>Expertise</th>
+        <th>Emergency Contact Number</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for mech in mechanic_list %}
+        <tr>
+            <td>{{ mech.0 }}</td>
+            <td>{{ mech.1 }}</td>
+            <td>{{ mech.2 }}</td>
+            <td>{{ mech.3 }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<form>
+    <div class="form-group">
+        <input required name="employee_id" placeholder="Mechanic Id">
+        <input required name="salary" placeholder="Salary">
+        <input required name="expertise" placeholder="Expertise">
+        <button class="btn btn-primary" name="mechanic_update" type="submit" value="Update">Update/Insert</button>
+    </div>
+</form>
+
+<h3> Salesman</h3>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Employee ID</th>
+        <th>Travel Subsistence</th>
+        <th>Emergency Contact Number</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for sale in salesman_list %}
+        <tr>
+            <td>{{ sale.0 }}</td>
+            <td>{{ sale.1 }}</td>
+            <td>{{ sale.2 }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<form>
+    <div class="form-group">
+        <input name="employee_id" placeholder="Salesman Id">
+
+        <button class="btn btn-primary" type="submit" value="Update">Update</button>
+    </div>
+</form>
+
+<h3>Admin Employees</h3>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Employee ID</th>
+        <th>Salary</th>
+        <th>Emergency Contact Number</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for admin in admin_list %}
+        <tr>
+            <td>{{ admin.0 }}</td>
+            <td>{{ admin.1 }}</td>
+            <td>{{ admin.2 }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<form>
+    <div class="form-group">
+        <input name="employee_id" placeholder="Admin Id">
+
+        <button class="btn btn-primary" type="submit" value="Update">Update</button>
+    </div>
+</form>
+
+
+<h3>Supervisor</h3>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Employee ID</th>
+        <th>Emergency Contact Number</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for sup in supervisor %}
+        <tr>
+            <td>{{ sup.emp_Id }}</td>
+            <td>{{ sup.emergency_contact_number }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<form>
+    <div class="form-group">
+        <input name="employee_id" placeholder="Supervisor Id">
+
+        <button class="btn btn-primary" type="submit" value="Update">Update</button>
+    </div>
+</form>
+
+
+</body>
+</html>

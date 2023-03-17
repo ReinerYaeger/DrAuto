@@ -18,3 +18,14 @@ class EmployeeLoginForm(forms.Form):
             if not employee.check_password(password):
                 raise forms.ValidationError('Invalid username or password')
         return super().clean()
+
+
+class EmployeeUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Employee
+        fields = ['emp_name', 'date_employed', 'dob']
+        labels = {
+            'emp_name': 'Employee Name',
+            'date_employed': 'Date Employed',
+            'dob': 'Date of Birth',
+        }

@@ -1,11 +1,13 @@
 from django.contrib.auth.hashers import make_password
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.db import connection
-
-from drauto.backend_functions import generate_cl_string, findASalesPerson, findClient, getDiscountPrice, getPrice
-from drauto.forms import EmployeeLoginForm
+from datetime import datetime
+from drauto.backend_functions import generate_cl_string, findASalesPerson, findClient, getDiscountPrice, getPrice, \
+    update_employee, update_mechanic
+from drauto.forms import EmployeeLoginForm, EmployeeUpdateForm
+from drauto.models import Employee
 
 # Create your views here.
 cursor = connection.cursor()
@@ -120,10 +122,22 @@ def purchase(requests, vehicle_id):
         # storing loging purchase
 
         with connection.cursor() as cursor:
+            # cursor.execute(f"""EXEC sp_AddClientPurchase
+            # '{purchase_id}',
+            # '{client_id}',
+            # '{chassis_number}',
+            # '{emp_id}',
+            # {price},
+            # {commission},
+            # GETDATE(),
+            # {amount_paid},
+            # '{payment_Method}';
+            # """)
+
             cursor.execute(f"""INSERT INTO DrautoshopAddb.dbo.Client_Purchase(purchase_id, client_Id, chassis_number, emp_Id, price, commission, date_sold, amt_paid, payment_method)
-                                VALUES('{purchase_id}', '{client_id}', '{chassis_number}', '{emp_id}' ,'{price}','{commission}', GETDATE(), '{amount_paid}', '{payment_Method}');""")
+                                 VALUES('{purchase_id}', '{client_id}', '{chassis_number}', '{emp_id}' ,'{price}','{commission}', GETDATE(), '{amount_paid}', '{payment_Method}');""")
             connection.commit()
-            return redirect('drauto/vehicle.html')
+            return redirect('/')
 
     context = {'vehicle': vehicle}
     return render(requests, 'drauto/purchase.html', context)
@@ -149,12 +163,15 @@ def admin_views(requests):
 
         cursor.execute("Select * From view_invoice")
         invoice_list = cursor.fetchall()
+        print(invoice_list)
 
     context = {'sales_list': sales_list,
                'commission_list': commission_list,
                'client_purchase_list': client_purchase_list,
                'salesman_purchase_list': salesman_purchase_list,
                'invoice_list': invoice_list, }
+
+    print(context)
     return render(requests, 'drauto/admin_page.html', context)
 
 
@@ -171,26 +188,26 @@ def client_purchase(requests):
     return render(requests, 'drauto/client_purchase.html', context)
 
 
-def admin_control(requests):
+def admin_control_employee(requests):
     with connection.cursor() as cursor:
         cursor.execute(
-            "Select *, emergency_contact_number  From Employee INNER JOIN Emergency_Contact EC on EC.emp_id = Employee.emp_id ")
+            "Select *, emergency_contact_number  From Employee LEFT JOIN  Emergency_Contact EC on EC.emp_id = Employee.emp_id ")
         employee_list = cursor.fetchall()
 
         cursor.execute(
-            "SELECT *, EC.emergency_contact_number FROM Mechanic INNER JOIN Emergency_Contact EC ON EC.emp_id = Mechanic.emp_id")
+            "SELECT *, EC.emergency_contact_number FROM Mechanic LEFT JOIN Emergency_Contact EC ON EC.emp_id = Mechanic.emp_id")
         mechanic_list = cursor.fetchall()
 
         cursor.execute(
-            "SELECT *, EC.emergency_contact_number FROM Salesman INNER JOIN Emergency_Contact EC ON EC.emp_id = Salesman.emp_id")
+            "SELECT *, EC.emergency_contact_number FROM Salesman LEFT JOIN Emergency_Contact EC ON EC.emp_id = Salesman.emp_id")
         salesman_list = cursor.fetchall()
 
         cursor.execute(
-            "SELECT *, EC.emergency_contact_number FROM Admin_Personnel INNER JOIN Emergency_Contact EC ON EC.emp_id = Admin_Personnel.emp_id")
+            "SELECT *, EC.emergency_contact_number FROM Admin_Personnel LEFT JOIN Emergency_Contact EC ON EC.emp_id = Admin_Personnel.emp_id")
         admin_list = cursor.fetchall()
 
         cursor.execute(
-            "SELECT *, EC.emergency_contact_number FROM Supervisor INNER JOIN Emergency_Contact EC ON EC.emp_id = Supervisor.emp_id")
+            "SELECT *, EC.emergency_contact_number FROM Supervisor LEFT JOIN Emergency_Contact EC ON EC.emp_id = Supervisor.emp_id")
         supervisor_list = cursor.fetchall()
 
         cursor.execute("SELECT * from Vehicle")
@@ -205,8 +222,20 @@ def admin_control(requests):
         cursor.execute("SELECT * from Four_WD")
         fourWD_list = cursor.fetchall()
 
+    emp_id = None
     if requests.method == 'POST':
-        print('Post')
+        if 'employee_update' in requests.POST:
+            print(requests.POST)
+            emp_id = requests.POST['employee_id']
+            emp_emg_contact = requests.POST['emergency_contact_number']
+            update_employee(requests, emp_id, emp_emg_contact)
+            return redirect('admin_control_employee')
+        if 'mechanic_update' in requests.POST:
+            print(requests.POST)
+            emp_id = requests.POST['employee_id']
+            salary = requests.POST['salary']
+            expertise = requests.POST['expertise']
+            update_mechanic(requests, emp_id, salary, expertise)
 
     context = {'employee_list': employee_list,
                'mechanic_list': mechanic_list,
@@ -216,5 +245,6 @@ def admin_control(requests):
                'vehicle_list': vehicle_list,
                'van_list': van_list,
                'car_list': car_list,
-               'fourWD_list': fourWD_list, }
-    return render(requests, 'drauto/admin_control.html', context)
+               'fourWD_list': fourWD_list,
+               'emp_id': emp_id}
+    return render(requests, 'drauto/admin_control_employee.html', context)

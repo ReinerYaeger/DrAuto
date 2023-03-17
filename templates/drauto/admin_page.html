@@ -7,157 +7,157 @@
 {% include 'drauto/navbar.html' %}
 
 <h3>Sales By Salespeople</h3>
-<table class="table">
-  <thead class="thead-dark">
+<table class="table table-striped">
+    <thead class="thead-dark">
     <tr>
-      <th>Employee ID</th>
-      <th>Salesman</th>
-      <th>Client</th>
-      <th>Make</th>
-      <th>Model</th>
-      <th>Car Type</th>
-      <th>Car Year</th>
-      <th>Condition</th>
-      <th>Mileage</th>
-      <th>Date Sold</th>
-      <th>Price</th>
+        <th>Employee ID</th>
+        <th>Salesman</th>
+        <th>Client</th>
+        <th>Make</th>
+        <th>Model</th>
+        <th>Car Type</th>
+        <th>Car Year</th>
+        <th>Condition</th>
+        <th>Mileage</th>
+        <th>Date Sold</th>
+        <th>Price</th>
     </tr>
-  </thead>
-  <tbody>
+    </thead>
+    <tbody>
     {% for sale in sales_list %}
-      <tr>
-        <td>{{ sale.0 }}</td>
-        <td>{{ sale.1 }}</td>
-        <td>{{ sale.2 }}</td>
-        <td>{{ sale.3 }}</td>
-        <td>{{ sale.4 }}</td>
-        <td>{{ sale.5 }}</td>
-        <td>{{ sale.6 }}</td>
-        <td>{{ sale.7 }}</td>
-        <td>{{ sale.8 }}</td>
-        <td>{{ sale.9 }}</td>
-        <td>{{ sale.10 }}</td>
-      </tr>
+        <tr>
+            <td>{{ sale.0 }}</td>
+            <td>{{ sale.1 }}</td>
+            <td>{{ sale.2 }}</td>
+            <td>{{ sale.3 }}</td>
+            <td>{{ sale.4 }}</td>
+            <td>{{ sale.5 }}</td>
+            <td>{{ sale.6 }}</td>
+            <td>{{ sale.7 }}</td>
+            <td>{{ sale.8 }}</td>
+            <td>{{ sale.9 }}</td>
+            <td>{{ sale.10 }}</td>
+        </tr>
     {% endfor %}
-  </tbody>
+    </tbody>
 </table>
 
 <h3>Commission Made By Each Sales Employee</h3>
-<table class="table">
-  <thead class="thead-dark">
+<table class="table table-striped">
+    <thead class="thead-dark">
     <tr>
-      <th>Employee ID</th>
-      <th>Salesman</th>
-      <th>Make</th>
-      <th>Model</th>
-      <th>Car Type</th>
-      <th>Car Year</th>
-      <th>Commission</th>
-      <th>Date Sold</th>
+        <th>Employee ID</th>
+        <th>Salesman</th>
+        <th>Make</th>
+        <th>Model</th>
+        <th>Car Type</th>
+        <th>Car Year</th>
+        <th>Commission</th>
+        <th>Date Sold</th>
     </tr>
-  </thead>
-  <tbody >
+    </thead>
+    <tbody>
     {% for commission in commission_list %}
-      <tr>
-        <td>{{ commission.0 }}</td>
-        <td>{{ commission.1 }}</td>
-        <td>{{ commission.2 }}</td>
-        <td>{{ commission.3 }}</td>
-        <td>{{ commission.4 }}</td>
-        <td>{{ commission.5 }}</td>
-        <td>{{ commission.6 }}</td>
-        <td>{{ commission.7 }}</td>
-      </tr>
+        <tr>
+            <td>{{ commission.0 }}</td>
+            <td>{{ commission.1 }}</td>
+            <td>{{ commission.2 }}</td>
+            <td>{{ commission.3 }}</td>
+            <td>{{ commission.4 }}</td>
+            <td>{{ commission.5 }}</td>
+            <td>{{ commission.6 }}</td>
+            <td>{{ commission.7 }}</td>
+        </tr>
     {% endfor %}
-  </tbody>
+    </tbody>
 </table>
 
 <h3>Vehicles Bought By Client</h3>
-<table class="table">
-  <thead class="thead-dark">
+<table class="table table-striped">
+    <thead class="thead-dark">
     <tr>
-      <th>Client</th>
-      <th>Make</th>
-      <th>Model</th>
-      <th>Car Type</th>
-      <th>Car Year</th>
-      <th>Condition</th>
-      <th>Mileage</th>
-      <th>Date Bought</th>
+        <th>Client</th>
+        <th>Make</th>
+        <th>Model</th>
+        <th>Car Type</th>
+        <th>Car Year</th>
+        <th>Condition</th>
+        <th>Mileage</th>
+        <th>Date Bought</th>
     </tr>
-  </thead>
-  <tbody>
+    </thead>
+    <tbody>
     {% for purchase in client_purchase_list %}
-    <tr>
-      <td>{{ purchase.0 }}</td>
-      <td>{{ purchase.1 }}</td>
-      <td>{{ purchase.2 }}</td>
-      <td>{{ purchase.3 }}</td>
-      <td>{{ purchase.4 }}</td>
-      <td>{{ purchase.5 }}</td>
-      <td>{{ purchase.6 }}</td>
-      <td>{{ purchase.7 }}</td>
-    </tr>
+        <tr>
+            <td>{{ purchase.0 }}</td>
+            <td>{{ purchase.1 }}</td>
+            <td>{{ purchase.2 }}</td>
+            <td>{{ purchase.3 }}</td>
+            <td>{{ purchase.4 }}</td>
+            <td>{{ purchase.5 }}</td>
+            <td>{{ purchase.6 }}</td>
+            <td>{{ purchase.7 }}</td>
+        </tr>
     {% endfor %}
-  </tbody>
+    </tbody>
 </table>
 
 <h3>Vehicles Bought By Employee</h3>
-<table class="table">
-  <thead class="thead-dark">
+<table class="table table-striped">
+    <thead class="thead-dark">
     <tr>
-      <th>Salesman Name</th>
-      <th>Vehicle Make</th>
-      <th>Vehicle Model</th>
-      <th>Year</th>
-      <th>Invoice Number</th>
-      <th>Invoice Date</th>
-      <th>Invoice Amount</th>
+        <th>Salesman Name</th>
+        <th>Vehicle Make</th>
+        <th>Vehicle Model</th>
+        <th>Year</th>
+        <th>Invoice Number</th>
+        <th>Invoice Date</th>
+        <th>Invoice Amount</th>
     </tr>
-  </thead>
-  <tbody>
+    </thead>
+    <tbody>
     {% for purchase in salesman_purchase_list %}
-      <tr>
-        <td>{{ purchase.0}}</td>
-        <td>{{ purchase.1}}</td>
-        <td>{{ purchase.2}}</td>
-        <td>{{ purchase.3}}</td>
-        <td>{{ purchase.4}}</td>
-        <td>{{ purchase.5}}</td>
-        <td>{{ purchase.6}}</td>
-      </tr>
+        <tr>
+            <td>{{ purchase.0 }}</td>
+            <td>{{ purchase.1 }}</td>
+            <td>{{ purchase.2 }}</td>
+            <td>{{ purchase.3 }}</td>
+            <td>{{ purchase.4 }}</td>
+            <td>{{ purchase.5 }}</td>
+            <td>{{ purchase.6 }}</td>
+        </tr>
     {% endfor %}
-  </tbody>
+    </tbody>
 </table>
 
 <h3>View All Invoices</h3>
-<table class="table">
-  <thead class="thead-dark">
+<table class="table table-striped">
+    <thead class="thead-dark">
     <tr>
-      <th>Invoice Number</th>
-      <th>Invoice Date</th>
-      <th>Client Name</th>
-      <th>Vehicle Make</th>
-      <th>Vehicle Model</th>
-      <th>Year</th>
-      <th>Invoice Amount</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for invoice in invoice_list %}
-      <tr>
-        <td>{{ invoice.0}}</td>
-        <td>{{ invoice.1}}</td>
-        <td>{{ invoice.2}}</td>
-        <td>{{ invoice.3}}</td>
-        <td>{{ invoice.4}}</td>
-        <td>{{ invoice.5}}</td>
-        <td>{{ invoice.6}}</td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
+        <th>Invoice Number</th>
+        <th>Client Name</th>
+        <th>Invoice Date</th>
 
+        <th>Vehicle Make</th>
+        <th>Vehicle Model</th>
+        <th>Year</th>
+        <th>Invoice Amount</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for invoice in invoice_list %}
+        <tr>
+            <td>{{ invoice.0 }}</td>
+            <td>{{ invoice.1 }}</td>
+            <td>{{ invoice.2 }}</td>
+            <td>{{ invoice.3 }}</td>
+            <td>{{ invoice.4 }}</td>
+            <td>{{ invoice.5 }}</td>
+            <td>{{ invoice.6 }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
 
 
 </body>
