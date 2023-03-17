@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Admin Page</title>
+</head>
+<body>
+{% include 'drauto/navbar.html' %}
+
+<h3>Sales By Salespeople</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Salesman</th>
+            <th>Client</th>
+            <th>Make</th>
+            <th>Model</th>
+            <th>Year</th>
+            <th>Condition</th>
+            <th>Mileage</th>
+            <th>Date Sold</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for sale in sales_list %}
+        <tr>
+            <td>{{ sale.1 }}</td>
+            <td>{{ sale.2 }}</td>
+            <td>{{ sale.3 }}</td>
+            <td>{{ sale.4 }}</td>
+            <td>{{ sale.5 }}</td>
+            <td>{{ sale.6 }}</td>
+            <td>{{ sale.7 }}</td>
+            <td>{{ sale.9 }}</td>
+            <td>{{ sale.10 }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+
+
+
+
+</body>
+</html>
