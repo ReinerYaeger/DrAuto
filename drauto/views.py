@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.db import connection
 from datetime import datetime
 from drauto.backend_functions import generate_cl_string, findASalesPerson, findClient, getDiscountPrice, getPrice, \
-    update_employee, update_mechanic, update_vehicle
+    update_employee, update_mechanic, update_vehicle, car_update
 from drauto.forms import EmployeeLoginForm, EmployeeUpdateForm
 from drauto.models import Employee
 
@@ -266,6 +266,10 @@ def admin_control_vehicle(requests):
             update_vehicle(requests,chassis_number,make,import_price_usd,car_year,
                            markup_percent,colour,engine_number,model,car_type,condition,
                            mileage,cc_rating)
+
+        if 'car_update' in requests.POST:
+            car_update()
+
 
 
     context = {'vehicle_list': vehicle_list,

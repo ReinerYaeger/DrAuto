@@ -103,4 +103,6 @@ def update_vehicle(requests, chassis_number, make, import_price_usd, car_year,
 
         return redirect('/')
 
+def car_update(requests):
+    return redirect('/')
 
