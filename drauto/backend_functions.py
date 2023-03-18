@@ -1,15 +1,27 @@
 from datetime import datetime
 import random
 import string
+
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
 from django.db import connection
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 from drauto.models import Employee, EmergencyContact
 
 
-def generate_cl_string(prefix):
+def generate_primarykey(prefix):
     random_chars = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
     return prefix + random_chars
+
+
+def getEmpId(emp_name=None):
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT client_id FROM Salesman WHERE emp_name = '{emp_name}")
+        connection.commit()
+        return cursor.fetchone()[0]
+        
 
 
 def findASalesPerson(emp_id=None):
@@ -35,6 +47,8 @@ def findClient(client_name):
 
 def getPrice(chassis_number):
     # cursor.execute("SELECT DrautoshopAddb.dbo.GET_VEHICLES_SELL_PRICE() WHERE chassis_number = '{chassis_number}'")
+    
+    #SQL Function Being Used 
     with connection.cursor() as cursor:
         cursor.execute(
             f"SELECT Selling_Price FROM DrautoshopAddb.dbo.GET_VEHICLE_SELL_PRICE() WHERE chassis_number = '{chassis_number}'")
@@ -79,30 +93,125 @@ def update_mechanic(requests, emp_id, salary, expertise):
     return redirect('/')
 
 
+def update_salesman(requests,emp_id,travel_subsistence):
+    #Using SQL sp Stored Procedure
+    with connection.cursor() as cursor:
+         cursor.execute(f"""EXEC DrautoshopAddb.dbo.sp_IncreaseTravelSub '{emp_id}','{travel_subsistence}' """)
+         connection.commit()
+    return redirect('/')
+         
+
 def update_vehicle(requests, chassis_number, make, import_price_usd, car_year,
                    markup_percent, colour, engine_number, model, car_type, condition,
-                   mileage, cc_rating):
+                   mileage, cc_rating,emp_name):
+    
+    print(import_price_usd)
     with connection.cursor() as cursor:
-        cursor.execute(f""" SELECT chassis_number FROM DrautoshopAddb.dbo.Vehicle WHERE  chassis_number = '{chassis_number}'""")
+        cursor.execute(
+            f""" SELECT chassis_number FROM DrautoshopAddb.dbo.Vehicle WHERE  chassis_number = '{chassis_number}'""")
         record = cursor.fetchone()
 
         if record:
-            cursor.execute(f"""UPDATE DrautoshopAddb.dbo.Vehicle
+            query = (f"""UPDATE DrautoshopAddb.dbo.Vehicle
                                                        SET make='{make}', import_price_usd={import_price_usd}, car_year='{car_year}', markup_percent={markup_percent}, colour='{colour}', 
                                                        engine_number='{engine_number}', model='{model}', car_type='{car_type}', [condition]='{condition}', mileage={mileage}, cc_rating='{cc_rating}'
                                                        WHERE chassis_number='{chassis_number}';""")
+            cursor.execute(query)
             connection.commit()
         else:
-
-            cursor.execute(f""""INSERT INTO DrautoshopAddb.dbo.Vehicle
-                                                   (chassis_number, make, import_price_usd, car_year, markup_percent, colour, engine_number,
-                                                    model, car_type, condition, mileage, cc_rating, isSold)
-                                                   VALUES('{chassis_number}', '{make}', {import_price_usd}, '{car_year}', {markup_percent},
-                                                    '{colour}', '{engine_number}', '{model}', '{car_type}', '{condition}', {mileage}, '{cc_rating}', 0);""")
+            query = (f"""INSERT INTO DrautoshopAddb.dbo.Vehicle
+                    (chassis_number, make, import_price_usd, car_year, markup_percent, colour, engine_number,
+                    model, car_type, condition, mileage, cc_rating, isSold) 
+                    VALUES('{chassis_number}', '{make}', {import_price_usd}, '{car_year}', {markup_percent},
+                    '{colour}', '{engine_number}', '{model}', '{car_type}', '{condition}', {mileage}, '{cc_rating}', 0);""")
+            cursor.execute(query)
+            
+            
+            # cursor.execute(f""""INSERT INTO DrautoshopAddb.dbo.Vehicle
+            #                                        (chassis_number, make, import_price_usd, car_year, markup_percent, colour, engine_number,
+            #                                         model, car_type, condition, mileage, cc_rating, isSold)
+            #                                        VALUES('{chassis_number}', '{make}', {import_price_usd}, '{car_year}', {markup_percent},
+            #                                         '{colour}', '{engine_number}', '{model}', '{car_type}', '{condition}', {mileage}, '{cc_rating}', 0);""")
             connection.commit()
+            emp_id = getEmpId(emp_name)
+            
+            #Using Sql sp stored procedure And Transcation
+            if markup_percent < 0:
+                value = import_price_usd * markup_percent
+            cursor.execute(f"""EXEC DrautoshopAddb.dbo.sp_INSERT_EMP_PURCHASE
+                           '{chassis_number}', '{emp_id}', GETDATE(), '{value}', '{import_price_usd}' """)
 
         return redirect('/')
+
 
 def car_update(requests):
     return redirect('/')
 
+
+def authenticate_client_login(requests, client_name, password):
+    
+    #SQL Function Being Used
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT dbo.ValidateLogin(%s, %s, 'C')", (client_name, password))
+        result = cursor.fetchone()[0]
+        if result == 1:
+            if not User.objects.filter(username=client_name).exists():
+                user = User.objects.create_user(username=client_name, password=password)
+            else:
+                user = User.objects.get(username=client_name)
+            
+            login(requests, user)
+        requests.session['is_authenticated'] = True
+        requests.session['client_name'] = client_name
+        requests.session.save()
+        return redirect('/')
+    # Don't reveal whether the user exists or not
+    return HttpResponse("Invalid username or password", status=401)
+
+
+def authenticate_staff_login(requests,emp_name,password):
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT dbo.ValidateLogin(%s, %s, 'E')", (emp_name, password))
+        result = cursor.fetchone()[0]
+        if result == 1:
+            if not User.objects.filter(username=emp_name).exists():
+                user = User.objects.create_superuser(username=emp_name, password=password)
+            else:
+                user = User.objects.get(username=emp_name)
+            
+            login(requests, user)
+        else:
+            print("User not Present ")
+        requests.session['is_authenticated'] = True
+        requests.session['emp_name'] = emp_name
+        requests.session.save()
+        return redirect('/')
+
+
+def register_client(requests,client_name,email,residential_address,password,phonenumber):
+    
+    #SQL Stored Procedure Being Used
+    #  with connection.cursor() as cursor:
+         
+    #      stored_proc = """EXEC [dbo].[sp_AddClient] @client_Id=?,
+    #                                                 @client_name=?,
+    #                                                 @email=?
+    #                                                 @residential_address=?
+    #                                                 @phone_number=?"""
+        
+    #     params = (client_name,email,residential_address,password,phonenumber)
+        
+    #     cursor.execute(stored_proc,)
+    with connection.cursor() as cursor:
+        client_id = generate_primarykey("CL")
+        cursor.execute(f"""EXEC sp_AddClient '{client_id}','{client_name}','{email}',
+                        '{residential_address}','{password}',
+                        '{phonenumber}' """)
+            
+    if not User.objects.filter(username=client_name).exists():
+        user = User.objects.create_user(username=client_name, password=password)
+        login(requests,user)
+    else:
+        print("User Already present")
+    
+    return redirect("/")

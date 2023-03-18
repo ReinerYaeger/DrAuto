@@ -5,7 +5,7 @@
 </head>
 <body>
 {% include 'drauto/navbar.html' %}
-
+{% if user.is_staff %}
 <h3>Employees</h3>
 <table class="table table-striped">
     <thead>
@@ -63,7 +63,8 @@
     </tbody>
 </table>
 
-<form>
+<form method="POST" action={% url 'admin_control' %}> 
+    {% csrf_token %}
     <div class="form-group">
         <input required name="employee_id" placeholder="Mechanic Id">
         <input required name="salary" placeholder="Salary">
@@ -92,11 +93,13 @@
     </tbody>
 </table>
 
-<form>
+<form method="POST" action="{%url 'admin_control_employee' %}">
+    {% csrf_token %}
     <div class="form-group">
-        <input name="employee_id" placeholder="Salesman Id">
+        <input required name="employee_id" placeholder="Salesman Id">
+        <input required name="travel_subsistence" placeholder="Travel Sub">
 
-        <button class="btn btn-primary" type="submit" value="Update">Update</button>
+        <button class="btn btn-primary" type="submit" name="salesman_update" value="Update">Update</button>
     </div>
 </form>
 
@@ -121,6 +124,7 @@
 </table>
 
 <form>
+    {% csrf_token %}
     <div class="form-group">
         <input name="employee_id" placeholder="Admin Id">
 
@@ -148,13 +152,17 @@
 </table>
 
 <form>
+    {% csrf_token %}
     <div class="form-group">
         <input name="employee_id" placeholder="Supervisor Id">
 
         <button class="btn btn-primary" type="submit" value="Update">Update</button>
     </div>
 </form>
+{% else%}
 
+    <h1>You are not Staff</h1>
+{%endif%}
 
 </body>
 </html>

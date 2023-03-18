@@ -6,10 +6,6 @@
 <body>
 {% include 'drauto/navbar.html' %}
 
-{% if request.user.is_staff %}
-
-
-{% else %}
     <h1> What we offer </h1>
     {% for vehicle in vehicle_list %}
         <div class="services">
@@ -21,20 +17,16 @@
                     <p>Year {{ vehicle.3 }}</p>
                     {% if vehicle.12 %}
                         <p>Sorry Already Sold</p>
-                    {% else %}
+                    {% elif request.user.is_authenticated %}
                         <a href="{% url 'purchase' vehicle_id=vehicle.0 %}"><p style="color: #00acee"> Purchase</p></a>
-                    {% endif %}
-                    {#                    {% if request.user.is_authenticated %}#}
-
-                    {#                    {% else %}#}
+                    {% else %}
                     <p> Login to Purchase </p>
-                    {#                    {% endif %}#}
+                    {% endif %}
                 </div>
             </div>
         </div>
     {% endfor %}
 
-{% endif %}
 
 
 </body>

@@ -12,16 +12,17 @@
         <li><a href={% url 'index' %} class="active">HOME</a></li>
         <li><a href="{% url 'services' %}">SERVICES</a></li>
         <li><a href="{% url 'vehicle' %}">VEHICLES</a></li>
-        <li><a href="{% url 'client_purchase' %}">View Purchases</a></li>
 
-        <li><a href="{% url 'admin_views' %}">Administration</a></li>
-        <li><a href="{% url 'admin_control_employee' %}">Admin Control Employee</a></li>
-        <li><a href="{% url 'admin_control_vehicle' %}">Admin Control Vehicle</a></li>
         {#     client_name=request.user.username#}
         {% if request.user.is_staff %}
 
+            <li><a href="{% url 'admin_views' %}">Administration</a></li>
+            <li><a href="{% url 'admin_control_employee' %}">Admin Control Employee</a></li>
+            <li><a href="{% url 'admin_control_vehicle' emp_name=user.username%}">Admin Control Vehicle</a></li>
+
         {% elif request.user.is_authenticated %}
             <li><a href="{% url 'contact' %}">CONTACT US</a></li>
+            <li><a href="{% url 'client_purchase' client_name=user.username %}">View Purchases</a></li>
 
             {#        {% else %}#}
             {#            <li>View Purchases</li>#}

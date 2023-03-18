@@ -12,26 +12,74 @@
     <form method="post" action="{% url 'register' %}">
         {% csrf_token %}
 
-      {% comment %}  {{ form.as_p }}{% endcomment %}
-        <label for="username">Username:</label>
-		<input type="text" id="username" name="username"><br><br>
-		<label for="password">Password:</label>
-		<input type="password" id="password" name="password"><br><br>
-		<label for="email">Email Address:</label>
-		<input type="email" id="email" name="email"><br><br>
-		<label for="residential_address">Residential Address:</label>
-		<input type="text" id="residential_address" name="residential_address"><br><br>
-		<input type="submit" value="Submit">
-    </form>
+        <div class="d-flex align-items-center" style="height: 100vh;">
+            <div class="mx-auto p-4 bg-light rounded" style="width: 500px; height: 300px">
+                <div class="form-group">
+                    <form method="POST" action="{% url 'client_login' %}">
+                        <h3>Client Register</h3>
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="username">Username:</label>
+                            <input required type="text" id="username" name="username"><br><br>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address:</label>
+                            <input required type="email" id="email" name="email"><br><br>
+                        </div>
+                        <div class="form-group">
+                            <label for="residential_address">Residential Address:</label>
+                            <input required type="text" id="residential_address" name="residential_address"><br><br>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password:</label>
+                            <input required type="password" id="password" name="password"><br><br>
+                        </div>
+                        <div class="form-group">
+                            <label for="phonenumber">Phone Number:</label>
+                            <input required type="text" id="phonenumber" name="phonenumber"><br><br>
+                        </div>
+                        <button class="btn btn-primary" name="register" type="submit" value="Register">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
 
-{% else %}
-    <form method="post" %}>
-        {% csrf_token %}
-        {{ form }}
-        {% comment %}<input type="text" name="username" placeholder="Username"/>
-        <input type="password" name="password" placeholder="Password"/>{% endcomment %}
-        <input type="submit" value="login">
-    </form>
+{% elif page == 'login' %}
+
+    <div class="d-flex align-items-center" style="height: 100vh;">
+        <div class="mx-auto p-4 bg-light rounded" style="width: 500px; height: 300px">
+            <div class="form-group">
+                <form method="POST" action="{% url 'client_login' %}">
+                    <h3>Client Login</h3>
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input required placeholder="Client Name" name="client_name" type="text">
+                        <input required placeholder="Password" name="password" type="password">
+                    </div>
+                    <button class="btn btn-primary" name="login" type="submit" value="login">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {%elif page == 'staff_login'%}
+
+    <div class="d-flex align-items-center" style="height: 100vh;">
+        <div class="mx-auto p-4 bg-light rounded" style="width: 500px; height: 300px">
+            <div class="form-group">
+                <form method="POST" action="{% url 'staff_login' %}">
+                    <h3>Staff Login</h3>
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input required placeholder="Staff Name" name="emp_name" type="text">
+                        <input required placeholder="Password" name="password" type="password">
+                    </div>
+                    <button class="btn btn-primary" name="login" type="submit" value="login">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
 {% endif %}
 
 </body>

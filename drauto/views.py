@@ -4,8 +4,8 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.db import connection
 from datetime import datetime
-from drauto.backend_functions import generate_cl_string, findASalesPerson, findClient, getDiscountPrice, getPrice, \
-    update_employee, update_mechanic, update_vehicle, car_update
+from drauto.backend_functions import  authenticate_staff_login, findASalesPerson, findClient, generate_primarykey, getDiscountPrice, getPrice, register_client, \
+    update_employee, update_mechanic, update_salesman, update_vehicle, car_update, authenticate_client_login
 from drauto.forms import EmployeeLoginForm, EmployeeUpdateForm
 from drauto.models import Employee
 
@@ -19,35 +19,33 @@ def index(requests):
 
 def client_login(requests):
     page = 'login'
+    template_name = 'drauto/login_register_form.html'
+    redirect_authenticated_user = True
 
-    return render(requests, 'drauto/login_register_form.html')
+    if requests.method == 'POST':
+        if 'login' in requests.POST:
+            client_name = requests.POST['client_name']
+            password = requests.POST['password']
+
+            user = authenticate_client_login(requests,client_name,password)
+
+    context = {'page': page}
+    return render(requests, 'drauto/login_register_form.html', context)
 
 
-def staff_login(request):
-    page = 'login'
+def staff_login(requests):
+    page = 'staff_login'
 
-    if request.method == 'POST':
-        form = EmployeeLoginForm(request.POST)
-        if form.is_valid():
-            emp_name = form.cleaned_data.get('emp_name')
-            password = form.cleaned_data.get('password')
-            user_type = 'E'
+    if requests.method == 'POST':
+        if 'login' in requests.POST:
+            emp_name = requests.POST['emp_name']
+            password = requests.POST['password']
 
-            user = authenticate(request, emp_name=emp_name, password_hash=password)
-            if user is not None:
-                with connection.cursor() as cursor:
-                    cursor.execute(f"SELECT dbo.ValidateLogin('{emp_name}', '{password}', '{user_type}')")
-                    result = cursor.fetchone()[0]
-                    if result == 1:
-                        login(request, user)
-                    else:
-                        return redirect('/')
-    else:
-        print(form.errors.as_data())
-        form = EmployeeLoginForm()
+            user = authenticate_staff_login(requests,emp_name,password)
+        
 
-    context = {'page': page, 'form': form}
-    return render(request, 'drauto/login_register_form.html', context)
+    context = {'page': page}
+    return render(requests, 'drauto/login_register_form.html', context)
 
 
 def logout_user(requests):
@@ -58,8 +56,20 @@ def logout_user(requests):
 
 def register_form(requests):
     page = 'register'
+    
+    if requests.method == "POST":
+        if 'register' in requests.POST:
+            client_username = requests.POST['username']
+            email = requests.POST['email']
+            residential_address = requests.POST['residential_address']
+            password = requests.POST['password']
+            phonenumber = requests.POST['phonenumber']
+            
+            register_client(requests,client_username,email,residential_address,password,phonenumber)
+    
+    
 
-    return render(requests, 'drauto/login_register_form.html', context)
+    return render(requests, 'drauto/login_register_form.html', {'page': page})
 
 
 def vehicle(requests):
@@ -113,7 +123,7 @@ def purchase(requests, vehicle_id):
         client_name = requests.POST['client_name']
         client_id = findClient(client_name)
         amount_paid = requests.POST['amountPaid']
-        purchase_id = generate_cl_string('PI')
+        purchase_id = generate_primarykey('PI')
         price = vehicle.get('price')
         chassis_number = vehicle.get('chassis_number')
         emp_id = findASalesPerson()
@@ -121,6 +131,7 @@ def purchase(requests, vehicle_id):
 
         # storing loging purchase
 
+            #SQL Stored Procedure  Being Used
         with connection.cursor() as cursor:
             # cursor.execute(f"""EXEC sp_AddClientPurchase
             # '{purchase_id}',
@@ -148,6 +159,8 @@ def contact(requests):
 
 
 def admin_views(requests):
+    
+    #SQL Views
     with connection.cursor() as cursor:
         cursor.execute("Select * From view_sales_by_salesman")
         sales_list = cursor.fetchall()
@@ -179,12 +192,23 @@ def services(requests):
     return render(requests, 'drauto/services.html')
 
 
-def client_purchase(requests):
+def client_purchase(requests,client_name):
+    #Sql View
+    
+    print(client_name)
+    
     with connection.cursor() as cursor:
-        cursor.execute("Select * From view_invoice Where Client = '{client_name}'")
+        cursor.execute("Select * From view_invoice Where Client = 'Alice'")
         invoice_list = cursor.fetchall()
+        for row in cursor:
+            invoice_list.append(row)
+            print(row)
 
-    context = {'invoice': invoice_list}
+
+    context = {'invoice_list': invoice_list}
+    
+    print("Last print ")
+    print(invoice_list)
     return render(requests, 'drauto/client_purchase.html', context)
 
 
@@ -224,6 +248,12 @@ def admin_control_employee(requests):
             salary = requests.POST['salary']
             expertise = requests.POST['expertise']
             update_mechanic(requests, emp_id, salary, expertise)
+        if 'salesman_update' in requests.POST:
+            print(requests.POST)
+            emp_id = requests.POST['employee_id']
+            travel_subsistence = requests.POST['travel_subsistence']
+            update_salesman(requests,emp_id,travel_subsistence)
+            
 
     context = {'employee_list': employee_list,
                'mechanic_list': mechanic_list,
@@ -234,7 +264,7 @@ def admin_control_employee(requests):
     return render(requests, 'drauto/admin_control_employee.html', context)
 
 
-def admin_control_vehicle(requests):
+def admin_control_vehicle(requests, emp_name):
     with connection.cursor() as cursor:
         cursor.execute("SELECT * FROM DrautoshopAddb.dbo.Vehicle")
         vehicle_list = cursor.fetchall()
@@ -263,17 +293,15 @@ def admin_control_vehicle(requests):
             condition = requests.POST['condition']
             mileage = requests.POST['mileage']
             cc_rating = requests.POST['cc_rating']
-            update_vehicle(requests,chassis_number,make,import_price_usd,car_year,
-                           markup_percent,colour,engine_number,model,car_type,condition,
-                           mileage,cc_rating)
+            update_vehicle(requests, chassis_number, make, import_price_usd, car_year,
+                           markup_percent, colour, engine_number, model, car_type, condition,
+                           mileage, cc_rating,emp_name)
 
         if 'car_update' in requests.POST:
             car_update()
 
-
-
     context = {'vehicle_list': vehicle_list,
                'van_list': van_list,
                'car_list': car_list,
-               'fwd_list': fwd_list,}
+               'fwd_list': fwd_list, }
     return render(requests, 'drauto/admin_control_vehicle.html', context)

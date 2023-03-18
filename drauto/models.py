@@ -40,6 +40,20 @@ class Car(models.Model):
         db_table = 'Car'
 
 
+class ClientManager(BaseUserManager):
+    def create_client(self, client_name, email=None, residential_address=None, password=None, **extra_fields):
+        """
+        Create and save a Client with the given client name, email, residential address,
+        password, and extra fields.
+        """
+        if not client_name:
+            raise ValueError('The Client name must be set')
+        client = self.model(client_name=client_name, email=email, residential_address=residential_address, **extra_fields)
+        client.set_password(password)
+        client.save(using=self._db)
+        return client
+
+
 class Client(AbstractBaseUser):
     client_id = models.CharField(db_column='client_Id', primary_key=True, max_length=10,
                                  db_collation='SQL_Latin1_General_CP1_CI_AS')  # Field name made lowercase.

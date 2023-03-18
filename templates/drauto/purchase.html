@@ -11,31 +11,39 @@
 <div class="card">
 
     <h2>{{ vehicle.make }} {{ vehicle.model }}</h2>
-    <p>Price: {{ vehicle.price }}</p>
-    {{ user.username }}
-    <p>And Just for your Here is a discount {{ vehicle.discount_price }}</p>
+    <h4>Price: {{ vehicle.price }}</h4>
+    {% if user.is_staff == False%}
+        <p> {{ user.username }} And Just for your Here is a discount {{ vehicle.discount_price }}</p>
 
-    <form method="post" action="">
-        {% csrf_token %}
+        
+        <form method="post" action={% url 'admin_control_vehicle' emp_name=employee_name%}>
+            {% csrf_token %}
 
-        {% comment %}{{ vehicle.1 }}
-        {{ vehicle.price }}
-        {{ form.as_p }}{% endcomment %}
+            {% comment %}{{ vehicle.1 }}
+            {{ vehicle.price }}
+            {{ form.as_p }}{% endcomment %}
 
-        <input type="radio" id="credit-card" name="paymentMethod" value="credit-card">
-        <label for="credit-card">Credit Card</label>
-        <input type="radio" id="crypto" name="paymentMethod" value="crypto-currency">
-        <label for="crypto">Crypto Currency</label>
-        <input type="radio" id="Cash" name="paymentMethod" value="cash">
-        <label for="Cash">Cash</label>
-        <br>
-        <input type="text" name="client_name" placeholder="Your Name">
-        <label for="amountPaid">
-            <input type="number" name="amountPaid" step="0.01" placeholder="Amount Paying">
-        </label>
-        <br>
-        <input type="submit" name="purchaseSubmit">
-    </form>
+            <input type="radio" id="credit-card" name="paymentMethod" value="credit-card">
+            <label for="credit-card">Credit Card</label>
+            <input type="radio" id="crypto" name="paymentMethod" value="crypto-currency">
+            <label for="crypto">Crypto Currency</label>
+            <input type="radio" id="Cash" name="paymentMethod" value="cash">
+            <label for="Cash">Cash</label>
+            <br>
+            <label for="amountPaid">
+                <input type="number" name="amountPaid" step="0.01" placeholder="Amount Paying">
+            </label>
+        
+                <input hidden value={{user.username}} name="client_name"></input>
+                <br>
+            
+            <button class="btn btn-primary" type="submit" name="purchaseSubmit">Buy</button>
+            <input hidden name="employee_name" value="{{user.username}}"> </input
+        </form>
+
+    {%else%}
+        <a href="{% url 'admin_control_vehicle' emp_name=user.username %}">View In Table</a>
+    {%endif%}
 
 </div>
 
