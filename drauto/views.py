@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.db import connection
 from datetime import datetime
 from drauto.backend_functions import generate_cl_string, findASalesPerson, findClient, getDiscountPrice, getPrice, \
-    update_employee, update_mechanic
+    update_employee, update_mechanic, update_vehicle
 from drauto.forms import EmployeeLoginForm, EmployeeUpdateForm
 from drauto.models import Employee
 
@@ -210,18 +210,6 @@ def admin_control_employee(requests):
             "SELECT *, EC.emergency_contact_number FROM Supervisor LEFT JOIN Emergency_Contact EC ON EC.emp_id = Supervisor.emp_id")
         supervisor_list = cursor.fetchall()
 
-        cursor.execute("SELECT * from Vehicle")
-        vehicle_list = cursor.fetchall()
-
-        cursor.execute("SELECT * from Van")
-        van_list = cursor.fetchall()
-
-        cursor.execute("SELECT * from Car")
-        car_list = cursor.fetchall()
-
-        cursor.execute("SELECT * from Four_WD")
-        fourWD_list = cursor.fetchall()
-
     emp_id = None
     if requests.method == 'POST':
         if 'employee_update' in requests.POST:
@@ -242,10 +230,6 @@ def admin_control_employee(requests):
                'admin_list': admin_list,
                'salesman_list': salesman_list,
                'supervisor_list': supervisor_list,
-               'vehicle_list': vehicle_list,
-               'van_list': van_list,
-               'car_list': car_list,
-               'fourWD_list': fourWD_list,
                'emp_id': emp_id}
     return render(requests, 'drauto/admin_control_employee.html', context)
 
@@ -255,5 +239,37 @@ def admin_control_vehicle(requests):
         cursor.execute("SELECT * FROM DrautoshopAddb.dbo.Vehicle")
         vehicle_list = cursor.fetchall()
 
-    context = {'vehicle_list': vehicle_list}
+        cursor.execute("SELECT * FROM DrautoshopAddb.dbo.Van")
+        van_list = cursor.fetchall()
+
+        cursor.execute("SELECT * FROM DrautoshopAddb.dbo.Car")
+        car_list = cursor.fetchall()
+
+        cursor.execute("SELECT * FROM DrautoshopAddb.dbo.Four_WD")
+        fwd_list = cursor.fetchall()
+
+    if requests.method == 'POST':
+        if 'vehicle_update' in requests.POST:
+            print(requests.POST)
+            chassis_number = requests.POST['chassis_number']
+            make = requests.POST['make']
+            import_price_usd = requests.POST['import_price_usd']
+            car_year = requests.POST['car_year']
+            markup_percent = requests.POST['markup_percent']
+            colour = requests.POST['colour']
+            engine_number = requests.POST['engine_number']
+            model = requests.POST['model']
+            car_type = requests.POST['car_type']
+            condition = requests.POST['condition']
+            mileage = requests.POST['mileage']
+            cc_rating = requests.POST['cc_rating']
+            update_vehicle(requests,chassis_number,make,import_price_usd,car_year,
+                           markup_percent,colour,engine_number,model,car_type,condition,
+                           mileage,cc_rating)
+
+
+    context = {'vehicle_list': vehicle_list,
+               'van_list': van_list,
+               'car_list': car_list,
+               'fwd_list': fwd_list,}
     return render(requests, 'drauto/admin_control_vehicle.html', context)

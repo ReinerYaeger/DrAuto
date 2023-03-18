@@ -58,7 +58,8 @@ def update_employee(requests, emp_id, emp_emg_contact):
         connection.commit()
     return redirect('/')
 
-def update_mechanic(requests,emp_id,salary,expertise):
+
+def update_mechanic(requests, emp_id, salary, expertise):
     with connection.cursor() as cursor:
         cursor.execute(f"SELECT * FROM DrautoshopAddb.dbo.Mechanic WHERE emp_Id='{emp_id}'")
         record = cursor.fetchone()
@@ -76,3 +77,30 @@ def update_mechanic(requests,emp_id,salary,expertise):
                 f"INSERT INTO DrautoshopAddb.dbo.Mechanic (emp_Id, salary, expertise) VALUES ('{emp_id}', {salary}, '{expertise}');")
             connection.commit()
     return redirect('/')
+
+
+def update_vehicle(requests, chassis_number, make, import_price_usd, car_year,
+                   markup_percent, colour, engine_number, model, car_type, condition,
+                   mileage, cc_rating):
+    with connection.cursor() as cursor:
+        cursor.execute(f""" SELECT chassis_number FROM DrautoshopAddb.dbo.Vehicle WHERE  chassis_number = '{chassis_number}'""")
+        record = cursor.fetchone()
+
+        if record:
+            cursor.execute(f"""UPDATE DrautoshopAddb.dbo.Vehicle
+                                                       SET make='{make}', import_price_usd={import_price_usd}, car_year='{car_year}', markup_percent={markup_percent}, colour='{colour}', 
+                                                       engine_number='{engine_number}', model='{model}', car_type='{car_type}', [condition]='{condition}', mileage={mileage}, cc_rating='{cc_rating}'
+                                                       WHERE chassis_number='{chassis_number}';""")
+            connection.commit()
+        else:
+
+            cursor.execute(f""""INSERT INTO DrautoshopAddb.dbo.Vehicle
+                                                   (chassis_number, make, import_price_usd, car_year, markup_percent, colour, engine_number,
+                                                    model, car_type, condition, mileage, cc_rating, isSold)
+                                                   VALUES('{chassis_number}', '{make}', {import_price_usd}, '{car_year}', {markup_percent},
+                                                    '{colour}', '{engine_number}', '{model}', '{car_type}', '{condition}', {mileage}, '{cc_rating}', 0);""")
+            connection.commit()
+
+        return redirect('/')
+
+

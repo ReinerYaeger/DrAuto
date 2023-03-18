@@ -46,5 +46,161 @@
 </table>
 
 
+<h3> Car</h3>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Chassis Number</th>
+        <th>Seat Capacity</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for car in car_list %}
+        <tr>
+            <td>{{ car.0 }}</td>
+            <td>{{ car.1 }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<form method="POST" action="{% url 'admin_control_vehicle' %}">
+    {% csrf_token %}
+    <div class="form-group">
+        <input required name="chassis_number" placeholder="Chassis Number">
+        <input type="text" required name="seating_capacity" placeholder="Seating Capacity">
+        <button class="btn btn-primary" name="car_update" type="submit" value="Update">Update/Insert</button>
+    </div>
+</form>
+
+<h3>Four Wheel Drive</h3>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Chassis Number</th>
+        <th>Vehicle Size</th>
+        <th>Fuel Type</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for fwd in fwd_list %}
+        <tr>
+            <td>{{ fwd.0 }}</td>
+            <td>{{ fwd.1 }}</td>
+            <td>{{ fwd.2 }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<form method="POST" action="{% url 'admin_control_vehicle' %}">
+    {% csrf_token %}
+    <div class="form-group">
+        <input required name="chassis_number" placeholder="Chassis Number">
+        <input type="text" required name="Vehicle Size" placeholder="Vehicle Size">
+        <input type="text" required name="fuel_type" placeholder="Fuel Type">
+        <button class="btn btn-primary" name="fwd_update" type="submit" value="Update">Update/Insert</button>
+    </div>
+</form>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Chassis Number</th>
+        <th>Haul Capacity</th>
+        <th>Max Clearance</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for van in van_list %}
+        <tr>
+            <td>{{ van.0 }}</td>
+            <td>{{ van.1 }}</td>
+            <td>{{ van.2 }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<h3>Van</h3>
+<form method="POST" action="{% url 'admin_control_vehicle' %}">
+    {% csrf_token %}
+    <div class="form-group">
+        <input required name="chassis_number" placeholder="Chassis Number">
+        <input type="text" required name="haul_capacity" placeholder="haul Capacity">
+        <input type="text" required name="max_clearance" placeholder="Max Clearance">
+        <button class="btn btn-primary" name="fwd_update" type="submit" value="Update">Update/Insert</button>
+    </div>
+</form>
+
+
+<div class="d-flex align-items-center" style="height: 100vh;">
+    <div class="mx-auto p-4 bg-light rounded" style="width: 500px;">
+        <h3>Vehicle Purchased By Salesman</h3>
+        <form>
+            <div class="form-group">
+                <label for="chassis_number">Chassis Number</label>
+                <input required type="text" class="form-control" id="chassis_number" name="chassis_number">
+            </div>
+            <div class="form-group">
+                <label for="make">Make</label>
+                <input type="text" class="form-control" id="make" name="make">
+            </div>
+            <div class="form-group">
+                <label for="import_price_usd">Import Price (USD)</label>
+                <input type="number" class="form-control" id="import_price_usd" name="import_price_usd">
+            </div>
+            <div class="form-group">
+                <label for="car_year">Car Year</label>
+                <input type="date" class="form-control" id="car_year" name="car_year">
+                <script>
+                    function formatDate() {
+                        var input = document.getElementById("car_year");
+                        var dateParts = input.value.split("-");
+                        var year = dateParts[0];
+                        var month = dateParts[1];
+                        var day = dateParts[2];
+                        var formattedDate = year + "-" + month + "-" + day;
+                        input.value = formattedDate;
+                    }
+                </script>
+            </div>
+            <div class="form-group">
+                <label for="markup_percent">Markup Percent</label>
+                <input type="number" class="form-control" id="markup_percent" name="markup_percent">
+            </div>
+            <div class="form-group">
+                <label for="colour">Colour</label>
+                <input type="text" class="form-control" id="colour" name="colour">
+            </div>
+            <div class="form-group">
+                <label for="engine_number">Engine Number</label>
+                <input type="text" class="form-control" id="engine_number" name="engine_number">
+            </div>
+            <div class="form-group">
+                <label for="model">Model</label>
+                <input type="text" class="form-control" id="model" name="model">
+            </div>
+            <div class="form-group">
+                <label for="car_type">Car Type</label>
+                <input type="text" class="form-control" id="car_type" name="car_type">
+            </div>
+            <div class="form-group">
+                <label for="condition">Condition</label>
+                <input type="text" class="form-control" id="condition" name="condition">
+            </div>
+            <div class="form-group">
+                <label for="mileage">Mileage</label>
+                <input type="number" class="form-control" id="mileage" name="mileage">
+            </div>
+            <div class="form-group">
+                <label for="cc_rating">CC Rating</label>
+                <input type="text" class="form-control" id="cc_rating" name="cc_rating">
+            </div>
+            <button type="submit" class="btn btn-primary">Update/Insert</button>
+        </form>
+    </div>
+</div>
+
+
 </body>
 </html>
