@@ -18,7 +18,7 @@ def generate_primarykey(prefix):
 
 def getEmpId(emp_name=None):
     with connection.cursor() as cursor:
-        cursor.execute("SELECT client_id FROM Salesman WHERE emp_name = '{emp_name}'")
+        cursor.execute(f"SELECT client_id FROM Salesman WHERE emp_name = '{emp_name}'")
         connection.commit()
         return cursor.fetchone()[0]
         
@@ -27,7 +27,7 @@ def getEmpId(emp_name=None):
 def findASalesPerson(emp_id=None):
     if emp_id == None:
         with connection.cursor() as cursor:
-            cursor.execute("SELECT TOP 1 emp_Id FROM Salesman ORDER BY NEWID()")
+            cursor.execute(f"SELECT TOP 1 emp_Id FROM Salesman ORDER BY NEWID()")
             connection.commit()
             return cursor.fetchone()[0]
 
@@ -59,7 +59,7 @@ def getPrice(chassis_number):
 
 def getDiscountPrice(chassis_number):
     with connection.cursor() as cursor:
-        cursor.execute("SELECT DrautoshopAddb.dbo.GET_DISCOUNT('{chassis_number}')")
+        cursor.execute(f"SELECT DrautoshopAddb.dbo.GET_DISCOUNT('{chassis_number}')")
         data = cursor.fetchall()
 
         return data[0][0]
@@ -201,6 +201,7 @@ def authenticate_client_login(requests, client_name, password):
 
 
 def authenticate_staff_login(requests,emp_name,password):
+    #SQL Function Being Used
     with connection.cursor() as cursor:
         cursor.execute("SELECT dbo.ValidateLogin(%s, %s, 'E')", (emp_name, password))
         result = cursor.fetchone()[0]

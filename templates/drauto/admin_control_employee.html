@@ -159,15 +159,6 @@
     {% endfor %}
     </tbody>
 </table>
-
-<form>
-    {% csrf_token %}
-    <div class="form-group">
-        <input name="employee_id" placeholder="Supervisor Id">
-
-        <button class="btn btn-primary" type="submit" value="Update">Update</button>
-    </div>
-</form>
 {% else%}
 
     <h1>You are not Staff</h1>
