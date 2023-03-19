@@ -16,7 +16,7 @@
         <p> {{ user.username }} And Just for your Here is a discount {{ vehicle.discount_price }}</p>
 
         
-        <form method="post" action={% url 'admin_control_vehicle' emp_name=employee_name%}>
+        <form method="post">
             {% csrf_token %}
 
             {% comment %}{{ vehicle.1 }}
@@ -38,7 +38,6 @@
                 <br>
             
             <button class="btn btn-primary" type="submit" name="purchaseSubmit">Buy</button>
-            <input hidden name="employee_name" value="{{user.username}}"> </input
         </form>
 
     {%else%}

@@ -4,11 +4,11 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.db import connection
 from datetime import datetime
-from drauto.backend_functions import  authenticate_staff_login, findASalesPerson, findClient, generate_primarykey, getDiscountPrice, getPrice, register_client, \
+from drauto.backend_functions import  assign_supervisor, authenticate_staff_login, findASalesPerson, findClient, generate_primarykey, getDiscountPrice, getPrice, register_client, \
     update_employee, update_mechanic, update_salesman, update_vehicle, car_update, authenticate_client_login
 from drauto.forms import EmployeeLoginForm, EmployeeUpdateForm
 from drauto.models import Employee
-
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 cursor = connection.cursor()
 
@@ -18,6 +18,9 @@ def index(requests):
 
 
 def client_login(requests):
+    
+    if requests.user.is_authenticated:
+        return redirect("drauto/login_register_form.html")
     page = 'login'
     template_name = 'drauto/login_register_form.html'
     redirect_authenticated_user = True
@@ -34,6 +37,8 @@ def client_login(requests):
 
 
 def staff_login(requests):
+    if requests.user.is_authenticated:
+        return redirect("/")
     page = 'staff_login'
 
     if requests.method == 'POST':
@@ -55,6 +60,8 @@ def logout_user(requests):
 
 
 def register_form(requests):
+    if requests.user.is_authenticated:
+        return redirect("/")
     page = 'register'
     
     if requests.method == "POST":
@@ -71,7 +78,6 @@ def register_form(requests):
 
     return render(requests, 'drauto/login_register_form.html', {'page': page})
 
-
 def vehicle(requests):
     with connection.cursor() as cursor:
         cursor.execute("SELECT * FROM DrautoshopAddb.dbo.Vehicle")
@@ -82,7 +88,7 @@ def vehicle(requests):
 
     return render(requests, 'drauto/vehicle.html', context)
 
-
+@login_required
 def purchase(requests, vehicle_id):
     # if not requests.user.is_authenticated:
     #     return redirect('/')
@@ -157,7 +163,7 @@ def purchase(requests, vehicle_id):
 def contact(requests):
     return render(requests, 'drauto/contact_page.html')
 
-
+@login_required
 def admin_views(requests):
     
     #SQL Views
@@ -191,14 +197,14 @@ def admin_views(requests):
 def services(requests):
     return render(requests, 'drauto/services.html')
 
-
+@login_required
 def client_purchase(requests,client_name):
-    #Sql View
+    #Using Sql View
     
     print(client_name)
     
     with connection.cursor() as cursor:
-        cursor.execute("Select * From view_invoice Where Client = 'Alice'")
+        cursor.execute(f"Select * From view_invoice Where client_name = '{client_name}'")
         invoice_list = cursor.fetchall()
         for row in cursor:
             invoice_list.append(row)
@@ -211,7 +217,7 @@ def client_purchase(requests,client_name):
     print(invoice_list)
     return render(requests, 'drauto/client_purchase.html', context)
 
-
+@login_required
 def admin_control_employee(requests):
     with connection.cursor() as cursor:
         cursor.execute(
@@ -233,6 +239,7 @@ def admin_control_employee(requests):
         cursor.execute(
             "SELECT *, EC.emergency_contact_number FROM Supervisor LEFT JOIN Emergency_Contact EC ON EC.emp_id = Supervisor.emp_id")
         supervisor_list = cursor.fetchall()
+        print(supervisor_list)
 
     emp_id = None
     if requests.method == 'POST':
@@ -242,6 +249,12 @@ def admin_control_employee(requests):
             emp_emg_contact = requests.POST['emergency_contact_number']
             update_employee(requests, emp_id, emp_emg_contact)
             return redirect('admin_control_employee')
+        
+        if 'assign_supervisor' in requests.POST:
+            print(requests.POST)
+            emp_id = requests.POST['employee_id']
+            assign_supervisor(requests,emp_id)
+        
         if 'mechanic_update' in requests.POST:
             print(requests.POST)
             emp_id = requests.POST['employee_id']
@@ -263,7 +276,7 @@ def admin_control_employee(requests):
                'emp_id': emp_id}
     return render(requests, 'drauto/admin_control_employee.html', context)
 
-
+@login_required
 def admin_control_vehicle(requests, emp_name):
     with connection.cursor() as cursor:
         cursor.execute("SELECT * FROM DrautoshopAddb.dbo.Vehicle")

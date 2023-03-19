@@ -11,13 +11,18 @@
 <table class="table">
   <thead>
     <tr>
+      <th>Invoice Number</th>
+      <th>Chassis Number</th>
       <th>Salesman Name</th>
+      <th>Client Name</th>
+      <th>Date Sold</th>
       <th>Vehicle Make</th>
       <th>Vehicle Model</th>
-      <th>Year</th>
-      <th>Invoice Number</th>
-      <th>Invoice Date</th>
-      <th>Invoice Amount</th>
+      <th>Vehicle Car Year</th>
+
+      <th>Total</th>
+      <th>Amount Paid</th>
+      <th>Payment Method</th>
     </tr>
   </thead>
   <tbody>
@@ -30,9 +35,25 @@
         <td>{{ purchase.4}}</td>
         <td>{{ purchase.5}}</td>
         <td>{{ purchase.6}}</td>
+        <td>{{ purchase.7}}</td>
+        <td>{{ purchase.8}}</td>
+        <td>{{ purchase.9}}</td>
+        <td>{{ purchase.10}}</td>
       </tr>
     {% endfor %}
   </tbody>
 </table>
+
+<h4>Do you need help from one of our mechanics</h4>
+<form method="POST" >
+  {% csrf_token %}
+  <div class="form-group">
+      <input required name="chassis_number" placeholder="Chassis Number">
+      <input required type="text" required name="haul_capacity" placeholder="haul Capacity">
+      <input type="text" required name="max_clearance" placeholder="Max Clearance">
+      <button class="btn btn-primary" name="fwd_update" type="submit" value="Update">Update/Insert</button>
+  </div>
+</form>
+
 </body>
 </html>

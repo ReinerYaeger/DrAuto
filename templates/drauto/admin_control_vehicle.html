@@ -142,7 +142,7 @@
             {% csrf_token %}
             <div class="form-group">
                 <label for="chassis_number">Chassis Number</label>
-                <input required type="text" class="form-control" value="VH" id="chassis_number" name="chassis_number">
+                <input required type="text" max="10" class="form-control" value="VH" id="chassis_number" name="chassis_number">
             </div>
             <div class="form-group">
                 <label for="make">Make</label>
@@ -150,7 +150,7 @@
             </div>
             <div class="form-group">
                 <label for="import_price_usd">Import Price (USD)</label>
-                <input type="number"  step="2" class="form-control" id="import_price_usd" name="import_price_usd">
+                <input type="number"  min="0" value="0" step="any" class="form-control" id="import_price_usd" name="import_price_usd">
             </div>
             <div class="form-group">
                 <label for="car_year">Car Year</label>
@@ -177,7 +177,7 @@
             </div>
             <div class="form-group">
                 <label for="engine_number">Engine Number</label>
-                <input type="text" class="form-control" value="EN" id="engine_number" name="engine_number">
+                <input type="text" class="form-control" max="10" value="EN" id="engine_number" name="engine_number">
             </div>
             <div class="form-group">
                 <label for="model">Model</label>

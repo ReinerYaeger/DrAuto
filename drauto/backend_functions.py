@@ -18,7 +18,7 @@ def generate_primarykey(prefix):
 
 def getEmpId(emp_name=None):
     with connection.cursor() as cursor:
-        cursor.execute("SELECT client_id FROM Salesman WHERE emp_name = '{emp_name}")
+        cursor.execute("SELECT client_id FROM Salesman WHERE emp_name = '{emp_name}'")
         connection.commit()
         return cursor.fetchone()[0]
         
@@ -65,10 +65,21 @@ def getDiscountPrice(chassis_number):
         return data[0][0]
 
 
+
+######## Update Employess
 def update_employee(requests, emp_id, emp_emg_contact):
     with connection.cursor() as cursor:
         cursor.execute(
             f"""INSERT INTO DrautoshopAddb.dbo.Emergency_Contact(emergency_contact_number, emp_Id) VALUES('{emp_emg_contact}', '{emp_id}');""")
+        connection.commit()
+    return redirect('/')
+
+
+def assign_supervisor(requests,emp_id):
+    
+    #Using sp stored Procedure from SQL
+    with connection.cursor() as cursor:
+        cursor.execute(f""" EXEC DrautoshopAddb.dbo.sp_AssignAsSupervisor '{emp_id}'""")
         connection.commit()
     return redirect('/')
 
@@ -95,12 +106,30 @@ def update_mechanic(requests, emp_id, salary, expertise):
 
 def update_salesman(requests,emp_id,travel_subsistence):
     #Using SQL sp Stored Procedure
+    
     with connection.cursor() as cursor:
-         cursor.execute(f"""EXEC DrautoshopAddb.dbo.sp_IncreaseTravelSub '{emp_id}','{travel_subsistence}' """)
-         connection.commit()
+        
+        cursor.execute(f"SELECT * FROM DrautoshopAddb.dbo.Salesman WHERE emp_Id='{emp_id}'")
+        record = cursor.fetchone()
+        cursor.execute(f"SELECT * FROM DrautoshopAddb.dbo.Employee WHERE emp_Id='{emp_id}'")
+        record2 = cursor.fetchone()
+        
+        if record:
+            cursor.execute(f"""EXEC DrautoshopAddb.dbo.sp_IncreaseTravelSub 
+                            '{emp_id}',
+                            '{travel_subsistence}' """)
+            connection.commit()
+        elif record2:
+            cursor.execute(f"""INSERT INTO DrautoshopAddb.dbo.Salesman
+                                (emp_Id, travel_subsistence)
+                                VALUES('{emp_id}', {travel_subsistence});""")
     return redirect('/')
-         
 
+
+
+
+         
+######## Update Vechiles 
 def update_vehicle(requests, chassis_number, make, import_price_usd, car_year,
                    markup_percent, colour, engine_number, model, car_type, condition,
                    mileage, cc_rating,emp_name):
@@ -140,8 +169,10 @@ def update_vehicle(requests, chassis_number, make, import_price_usd, car_year,
                 value = import_price_usd * markup_percent
             cursor.execute(f"""EXEC DrautoshopAddb.dbo.sp_INSERT_EMP_PURCHASE
                            '{chassis_number}', '{emp_id}', GETDATE(), '{value}', '{import_price_usd}' """)
+            connection.commit()
+            return redirect('/')
 
-        return redirect('/')
+    return redirect('/')
 
 
 def car_update(requests):
