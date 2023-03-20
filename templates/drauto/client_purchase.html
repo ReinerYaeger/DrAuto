@@ -3,6 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+
+    <script>
+      function updateAddonCost() {
+        var addonOption = document.getElementById("addon_option");
+        var addonCost = document.getElementById("addon_cost");
+        var addonTime = document.getElementById("addon_time");
+    
+        switch (addonOption.value) {
+          case "rims":
+            addonCost.value = "1000";
+            addonTime.value = "3"
+            break;
+          case "wing":
+            addonCost.value = "2000";
+            addonTime.value = "2"
+            break;
+          case "back_up_camera":
+            addonCost.value = "500";
+            addonTime.value = "1"
+            break;
+          case "air_suspension":
+            addonCost.value = "1500";
+            addonTime.value = "10"
+            break;
+          default:
+            addonCost.value = "0";
+            addonTime.value = "0"
+            break;
+        }
+      }
+
+      function updateRepairCost(){
+        var repairOption = document.getElementById("repair_option");
+        var repairCost = document.getElementById("repair_cost");
+        var repairTime = document.getElementById("repair_time");
+    
+        switch (repairOption.value) {
+          case "ac":
+          repairCost.value = "1000";
+          repairTime.value = "3"
+            break;
+          case "transmission":
+          repairCost.value = "20000";
+          repairTime.value = "20"
+            break;
+          case "engine_block":
+          repairCost.value = "500";
+          repairTime.value = "15"
+            break;
+          case "suspension":
+          repairCost.value = "15000";
+          repairTime.value = "10"
+            break;
+          default:
+          repairCost.value = "0";
+          repairTime.value = "0"
+            break;
+        }
+      }
+      
+      
+      function updatePartChange(){
+        var part_change_option = document.getElementById("part_change_option");
+        var part_change_cost = document.getElementById("part_change_cost");
+        var part_change_time = document.getElementById("part_change_time");
+    
+        switch (part_change_option.value) {
+          case "ac":
+          part_change_cost.value = "650";
+          part_change_time.value = "3"
+            break;
+          case "exhaust":
+          part_change_cost.value = "9500";
+          part_change_time.value = "9"
+            break;
+          case "door":
+          part_change_cost.value = "4500";
+          part_change_time.value = "7"
+            break;
+          case "car_seat":
+          part_change_cost.value = "3000";
+          part_change_time.value = "4"
+            break;
+          default:
+          part_change_cost.value = "0";
+          part_change_time.value = "0"
+            break;
+        }
+      }
+    </script>
 </head>
 <body>
 {% include 'drauto/navbar.html' %}
@@ -44,14 +134,66 @@
   </tbody>
 </table>
 
-<h4>Do you need help from one of our mechanics</h4>
+<h4>Request an addon</h4>
 <form method="POST" >
   {% csrf_token %}
   <div class="form-group">
       <input required name="chassis_number" placeholder="Chassis Number">
-      <input required type="text" required name="haul_capacity" placeholder="haul Capacity">
-      <input type="text" required name="max_clearance" placeholder="Max Clearance">
-      <button class="btn btn-primary" name="fwd_update" type="submit" value="Update">Update/Insert</button>
+      <label for="addon_option">Choose an Addon:</label>
+      <select name="addon_option" id="addon_option" onchange="updateAddonCost()">
+        <option value="0">Choose an option</option>
+        <option value="rims">Wheels and Rims</option>
+        <option value="wing">CarbonFibre Wing</option>
+        <option value="back_up_camera">Back up Camera</option>
+        <option value="air_suspension">Air Suspension</option>
+      </select>
+      <input  readonly name="addon_cost", value="0" id="addon_cost">Cost</input>
+      <input hidden readonly name="addon_time" value ="0" id="addon_time">
+      
+      <button class="btn btn-primary" name="addon_update" type="submit" value="Update">Update/Insert</button>
+  </div>
+</form>
+
+<h4>Request a Repair</h4>
+<form method="POST" >
+  {% csrf_token %}
+  <div class="form-group">
+      <input required name="chassis_number" placeholder="Chassis Number">
+      <label for="repair_option">Choose Repair Type:</label>
+      <select name="repair_option" id="repair_option" onchange="updateRepairCost()">
+        <option value="0">Choose an option</option>
+        <option value="ac">Repair Ac</option>
+        <option value="transmission">Repair transmission</option>
+        <option value="engine_block">Repiar Engine Block</option>
+        <option value="suspension">Repair Suspension</option>
+      </select>
+      
+      <input  readonly name="repair_cost", value="0" id="repair_cost"></input>
+      <input hidden readonly name="repair_time" value ="0" id="repair_time">
+      
+      <button class="btn btn-primary" name="repair_update" type="submit" value="Update">Update/Insert</button>
+  </div>
+</form>
+
+
+<h4>Request a Part Change</h4>
+<form method="POST" >
+  {% csrf_token %}
+  <div class="form-group">
+      <input required name="chassis_number" placeholder="Chassis Number">
+      <label for="part_change_option">Choose Part To Change:</label>
+      <select name="part_change_option" id="part_change_option" onchange="updatePartChange()">
+        <option value="0">Choose an option</option>
+        <option value="exhaust">Exhaust</option>
+        <option value="brake">Brake System</option>
+        <option value="door">Door</option>
+        <option value="car_seat">Car Seat</option>
+      </select>
+      
+      <input  readonly name="part_change_cost", value="0" id="part_change_cost"></input>
+      <input hidden readonly name="part_change_time" value ="0" id="part_change_time">
+      
+      <button class="btn btn-primary" name="part_change_update" type="submit" value="Update">Update/Insert</button>
   </div>
 </form>
 

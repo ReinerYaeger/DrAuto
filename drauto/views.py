@@ -4,7 +4,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.db import connection
 from datetime import datetime
-from drauto.backend_functions import  assign_supervisor, authenticate_staff_login, findASalesPerson, findClient, generate_primarykey, getDiscountPrice, getPrice, register_client, \
+from drauto.backend_functions import  addon_update, assign_supervisor, authenticate_staff_login, findASalesPerson, findClient, generate_primarykey, getDiscountPrice, getPrice, part_change_update, register_client, repair_update, \
     update_employee, update_mechanic, update_salesman, update_vehicle, car_update, authenticate_client_login
 from drauto.forms import EmployeeLoginForm, EmployeeUpdateForm
 from drauto.models import Employee
@@ -210,6 +210,27 @@ def client_purchase(requests,client_name):
             invoice_list.append(row)
             print(row)
 
+    if requests.method == "POST":
+        if 'addon_update' in requests.POST:
+            
+            chassis_number =  requests.POST['chassis_number']
+            addon_option = requests.POST['addon_option']
+            cost = requests.POST['addon_cost']
+            time = requests.POST['addon_time']
+            addon_update(requests,chassis_number,addon_option,cost,time)
+        if 'repair_update' in requests.POST:
+            chassis_number =  requests.POST['chassis_number']
+            repair_option = requests.POST['repair_option']
+            cost = requests.POST['repair_cost']
+            time = requests.POST['repair_time']
+            repair_update(requests,chassis_number,repair_option,cost,time)
+        if 'part_change_update' in requests.POST:
+            chassis_number =  requests.POST['chassis_number']
+            part_change_option = requests.POST['part_change_option']
+            cost = requests.POST['part_change_cost']
+            time = requests.POST['part_change_time']
+            part_change_update(requests,chassis_number,part_change_option,cost,time)
+        
 
     context = {'invoice_list': invoice_list}
     

@@ -34,9 +34,13 @@ def findASalesPerson(emp_id=None):
     if emp_id is not None:
         with connection.cursor() as cursor:
             cursor.execute(f"SELECT * FROM Salesman WHERE emp_id = '{emp_id}'")
-            connection.commit()
-            return cursor.fetchone()[0]
-
+            
+def findAMechanic(emp_id=None,emp_name=None):
+    with connection.cursor() as cursor:
+        cursor.execute(f"SELECT TOP 1 emp_Id FROM Mechanic ORDER BY NEWID()")
+        connection.commit()
+        return cursor.fetchone()[0]
+        
 
 def findClient(client_name):
     with connection.cursor() as cursor:
@@ -179,6 +183,51 @@ def car_update(requests):
     return redirect('/')
 
 
+#### WORK Done Functions
+
+def addon_update(requests,chassis_number,addon_option,cost,time):
+    
+    mech_emp_id = findAMechanic()
+    work_id = generate_primarykey('WD')
+    with connection.cursor() as cursor:        
+        cursor.execute(f"""INSERT INTO Work_Done (work_done_id, emp_Id, hrs_worked) 
+                       Values ('{work_id}','{mech_emp_id}',{time})""")
+        connection.commit()
+        
+        cursor.execute(f"""INSERT INTO Add_on (work_done_id, addOn_description ,cost) 
+                       Values ('{work_id}','{addon_option}',{cost})""")
+        connection.commit()
+    return redirect("/")
+
+
+def repair_update(requests,chassis_number,repair_option,cost,time):
+    mech_emp_id = findAMechanic()
+    work_id = generate_primarykey('WD')
+    with connection.cursor() as cursor:        
+        cursor.execute(f"""INSERT INTO Work_Done (work_done_id, emp_Id, hrs_worked) 
+                       Values ('{work_id}','{mech_emp_id}',{time})""")
+        connection.commit()
+        
+        cursor.execute(f"""INSERT INTO Repair (work_done_id, repair_description ,cost) 
+                       Values ('{work_id}','{repair_option}',{cost})""")
+        connection.commit()
+    return redirect("/")
+    
+
+
+def part_change_update(requests,chassis_number,part_change_option,cost,time):
+    mech_emp_id = findAMechanic()
+    work_id = generate_primarykey('WD')
+    with connection.cursor() as cursor:        
+        cursor.execute(f"""INSERT INTO Work_Done (work_done_id, emp_Id, hrs_worked) 
+                       Values ('{work_id}','{mech_emp_id}',{time})""")
+        connection.commit()
+        
+        cursor.execute(f"""INSERT INTO Parts_Changed (work_done_id, part_name ,cost) 
+                       Values ('{work_id}','{part_change_option}',{cost})""")
+        connection.commit()
+    return redirect("/")
+
 def authenticate_client_login(requests, client_name, password):
     
     #SQL Function Being Used
@@ -195,7 +244,7 @@ def authenticate_client_login(requests, client_name, password):
         requests.session['is_authenticated'] = True
         requests.session['client_name'] = client_name
         requests.session.save()
-        return redirect('/')
+    return redirect('/')
     # Don't reveal whether the user exists or not
     return HttpResponse("Invalid username or password", status=401)
 
@@ -217,7 +266,7 @@ def authenticate_staff_login(requests,emp_name,password):
         requests.session['is_authenticated'] = True
         requests.session['emp_name'] = emp_name
         requests.session.save()
-        return redirect('/')
+    return redirect('/')
 
 
 def register_client(requests,client_name,email,residential_address,password,phonenumber):
