@@ -10,7 +10,7 @@
 
     <ul class="navbar">
         <li><a href={% url 'index' %} class="active">HOME</a></li>
-        <li><a href="{% url 'services' %}">SERVICES</a></li>
+        {% comment %} <li><a href="{% url 'services' %}">SERVICES</a></li> {% endcomment %}
         <li><a href="{% url 'vehicle' %}">VEHICLES</a></li>
 
         {#     client_name=request.user.username#}

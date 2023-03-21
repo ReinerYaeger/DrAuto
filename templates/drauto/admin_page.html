@@ -163,6 +163,43 @@
     </tbody>
 </table>
 
+
+<h3>Requested Work for Mechanic</h3>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Work Done ID</th>
+        <th>Mechanic's Id</th>
+        <th>Hours Worked</th>
+        <th>Add On Description</th>
+        <th>Addon Cost</th>
+        <th>Part Name</th>
+        <th>Part Description</th>
+        <th>Part of Cost</th>
+        <th>Repair Description</th>
+        <th>Repair Cost</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for wd in work_done_list %}
+        <tr>
+            <td>{{ wd.0 }}</td>
+            <td>{{ wd.1 }}</td>
+            <td>{{ wd.2 }}</td>
+            <td>{{ wd.3 }}</td>
+            <td>{{ wd.4 }}</td>
+            <td>{{ wd.5 }}</td>
+            <td>{{ wd.6 }}</td>
+            <td>{{ wd.7 }}</td>
+            <td>{{ wd.8 }}</td>
+            <td>{{ wd.9 }}</td>
+
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+
 {% else%}
 <h1>You are not Staff</h1>
 

@@ -183,12 +183,24 @@ def admin_views(requests):
         cursor.execute("Select * From view_invoice")
         invoice_list = cursor.fetchall()
         print(invoice_list)
+        
+        cursor.execute(f"""SELECT wd.work_done_id, wd.emp_id, wd.hrs_worked,
+                            A.addOn_description, A.cost,
+                            P.part_name, P.part_description, P.cost AS part_cost,
+                            R.repair_description, R.cost AS repair_cost
+                                FROM Work_Done wd
+                                LEFT JOIN Add_On A ON wd.work_done_id = A.work_done_id
+                                LEFT JOIN Parts_Changed P ON wd.work_done_id = P.work_done_id
+                                LEFT JOIN Repair R ON wd.work_done_id = R.work_done_id;""")
+        work_done_list = cursor.fetchall()
+        print(work_done_list)
 
     context = {'sales_list': sales_list,
                'commission_list': commission_list,
                'client_purchase_list': client_purchase_list,
                'salesman_purchase_list': salesman_purchase_list,
-               'invoice_list': invoice_list, }
+               'invoice_list': invoice_list, 
+               "work_done_list":work_done_list}
 
     print(context)
     return render(requests, 'drauto/admin_page.html', context)
@@ -197,6 +209,8 @@ def admin_views(requests):
 def services(requests):
     return render(requests, 'drauto/services.html')
 
+
+#security
 @login_required
 def client_purchase(requests,client_name):
     #Using Sql View
@@ -238,6 +252,7 @@ def client_purchase(requests,client_name):
     print(invoice_list)
     return render(requests, 'drauto/client_purchase.html', context)
 
+#security
 @login_required
 def admin_control_employee(requests):
     with connection.cursor() as cursor:
@@ -261,20 +276,24 @@ def admin_control_employee(requests):
             "SELECT *, EC.emergency_contact_number FROM Supervisor LEFT JOIN Emergency_Contact EC ON EC.emp_id = Supervisor.emp_id")
         supervisor_list = cursor.fetchall()
         print(supervisor_list)
+        
 
-    emp_id = None
     if requests.method == 'POST':
         if 'employee_update' in requests.POST:
             print(requests.POST)
-            emp_id = requests.POST['employee_id']
+            # emp_id = requests.POST['emp_id']
             emp_emg_contact = requests.POST['emergency_contact_number']
-            update_employee(requests, emp_id, emp_emg_contact)
+            emp_name =   requests.POST['emp_name']
+            dob =  requests.POST['dob']
+            password_hash = requests.POST['password_hash']
+            update_employee(requests,emp_name,dob, emp_emg_contact,password_hash)
             return redirect('admin_control_employee')
         
         if 'assign_supervisor' in requests.POST:
             print(requests.POST)
             emp_id = requests.POST['employee_id']
             assign_supervisor(requests,emp_id)
+            
         
         if 'mechanic_update' in requests.POST:
             print(requests.POST)
@@ -294,9 +313,11 @@ def admin_control_employee(requests):
                'admin_list': admin_list,
                'salesman_list': salesman_list,
                'supervisor_list': supervisor_list,
-               'emp_id': emp_id}
+               #'emp_id': emp_id,
+               }
     return render(requests, 'drauto/admin_control_employee.html', context)
 
+#security
 @login_required
 def admin_control_vehicle(requests, emp_name):
     with connection.cursor() as cursor:

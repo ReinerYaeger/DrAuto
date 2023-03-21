@@ -34,9 +34,23 @@
 <form method="POST" action="{% url 'admin_control' %}">
     {% csrf_token %}
     <div class="form-group">
-        <input type="text" required name="employee_id" placeholder="Employee Id">
-        <input required name="emergency_contact_number" placeholder="Emergency Contact Number">
-        <button class="btn btn-primary" name="employee_update" type="submit" value="Update">Update</button>
+        {% comment %} <input type="text" required name="employee_id" placeholder="Employee Id"> {% endcomment %}
+        <input required name="emp_name" placeholder="Name">
+        Date of Birth<input required name="dob" id="dob" placeholder="Date of Birth" type="date">
+        <script>
+            function formatDate() {
+                var input = document.getElementById("dob");
+                var dateParts = input.value.split("-");
+                var year = dateParts[0];
+                var month = dateParts[1];
+                var day = dateParts[2];
+                var formattedDate = year + "-" + month + "-" + day;
+                input.value = formattedDate;
+            }
+        </script>
+        <input name="emergency_contact_number" placeholder="Emergency Contact Number">
+        <input required name="password_hash" placeholder="Password">
+        <button class="btn btn-primary" name="employee_update" type="submit" value="Update">Insert</button>
     </div>
 </form>
 <br>
@@ -159,6 +173,8 @@
     {% endfor %}
     </tbody>
 </table>
+
+
 {% else%}
 
     <h1>You are not Staff</h1>

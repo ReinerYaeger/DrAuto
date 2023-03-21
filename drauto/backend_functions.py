@@ -71,8 +71,15 @@ def getDiscountPrice(chassis_number):
 
 
 ######## Update Employess
-def update_employee(requests, emp_id, emp_emg_contact):
+def update_employee(requests,emp_name,dob, emp_emg_contact,password_hash,emp_id=None):
+    
     with connection.cursor() as cursor:
+        emp_id = generate_primarykey('EM')
+        cursor.execute(f"""INSERT INTO DrautoshopAddb.dbo.Employee
+                            (emp_Id, emp_name, date_employed, dob, password_hash)
+                            VALUES('{emp_id}', '{emp_name}', GETDATE(), '{dob}', '{password_hash}');""")
+        connection.commit()
+
         cursor.execute(
             f"""INSERT INTO DrautoshopAddb.dbo.Emergency_Contact(emergency_contact_number, emp_Id) VALUES('{emp_emg_contact}', '{emp_id}');""")
         connection.commit()
@@ -85,7 +92,7 @@ def assign_supervisor(requests,emp_id):
     with connection.cursor() as cursor:
         cursor.execute(f""" EXEC DrautoshopAddb.dbo.sp_AssignAsSupervisor '{emp_id}'""")
         connection.commit()
-    return redirect('/')
+    return redirect('drauto/admin_control_employee')
 
 
 def update_mechanic(requests, emp_id, salary, expertise):
