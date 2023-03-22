@@ -97,12 +97,13 @@
     {% csrf_token %}
     <div class="form-group">
         <input required name="chassis_number" placeholder="Chassis Number">
-        <input type="text" required name="Vehicle Size" placeholder="Vehicle Size">
+        <input type="text" required name="vehicle_size" placeholder="Vehicle Size">
         <input type="text" required name="fuel_type" placeholder="Fuel Type">
         <button class="btn btn-primary" name="fwd_update" type="submit" value="Update">Update/Insert</button>
     </div>
 </form>
 
+<h3>Van</h3>
 <table class="table table-striped">
     <thead>
     <tr>
@@ -122,14 +123,14 @@
     </tbody>
 </table>
 
-<h3>Van</h3>
+
 <form method="POST" action="{% url 'admin_control_vehicle' emp_name=user.username %}">
     {% csrf_token %}
     <div class="form-group">
         <input required name="chassis_number" placeholder="Chassis Number">
         <input type="text" required name="haul_capacity" placeholder="haul Capacity">
-        <input type="text" required name="max_clearance" placeholder="Max Clearance">
-        <button class="btn btn-primary" name="fwd_update" type="submit" value="Update">Update/Insert</button>
+        <input type="text" required name="maxlength_clearance" placeholder="Max Clearance">
+        <button class="btn btn-primary" name="van_update" type="submit" value="Update">Update/Insert</button>
     </div>
 </form>
 
@@ -177,7 +178,7 @@
             </div>
             <div class="form-group">
                 <label for="engine_number">Engine Number</label>
-                <input type="text" max="10" class="form-control" max="10" value="EN" id="engine_number" name="engine_number">
+                <input type="text" maxlength="10" class="form-control" max="10" value="EN" id="engine_number" name="engine_number">
             </div>
             <div class="form-group">
                 <label for="model">Model</label>
@@ -197,7 +198,7 @@
             </div>
             <div class="form-group">
                 <label for="cc_rating">CC Rating</label>
-                <input type="text" max="15" class="form-control" id="cc_rating" name="cc_rating">
+                <input type="text" maxlength="15" class="form-control" id="cc_rating" name="cc_rating">
             </div>
             <button type="submit" name="vehicle_update" class="btn btn-primary">Update/Insert</button>
         </form>

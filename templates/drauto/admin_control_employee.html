@@ -48,7 +48,7 @@
                 input.value = formattedDate;
             }
         </script>
-        <input name="emergency_contact_number" placeholder="Emergency Contact Number">
+        <input max="10" name="emergency_contact_number" placeholder="Emergency Contact Number">
         <input required name="password_hash" placeholder="Password">
         <button class="btn btn-primary" name="employee_update" type="submit" value="Update">Insert</button>
     </div>
@@ -90,7 +90,7 @@
     {% csrf_token %}
     <div class="form-group">
         <input required name="employee_id" placeholder="Mechanic Id">
-        <input required name="salary" placeholder="Salary">
+        <input required max="25"name="salary" placeholder="Salary">
         <input required name="expertise" placeholder="Expertise">
         <button class="btn btn-primary" name="mechanic_update" type="submit" value="Update">Update/Insert</button>
     </div>
@@ -151,7 +151,7 @@
     <div class="form-group">
         <input name="employee_id" placeholder="Admin Id">
 
-        <button class="btn btn-primary" type="submit" value="Update">Update</button>
+        <button n class="btn btn-primary" type="submit" value="Update">Update</button>
     </div>
 </form>
 

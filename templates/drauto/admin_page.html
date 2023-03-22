@@ -199,6 +199,27 @@
     </tbody>
 </table>
 
+<h3>Top Selling Vehicles</h3>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Make</th>
+        <th>Amount Sold</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    {% for tl in top_selling_list %}
+        <tr>
+            <td>{{ tl.0 }}</td>
+            <td>{{ tl.1 }}</td>
+
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+
 
 {% else%}
 <h1>You are not Staff</h1>

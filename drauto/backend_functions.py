@@ -173,11 +173,15 @@ def update_vehicle(requests, chassis_number, make, import_price_usd, car_year,
             #                                        VALUES('{chassis_number}', '{make}', {import_price_usd}, '{car_year}', {markup_percent},
             #                                         '{colour}', '{engine_number}', '{model}', '{car_type}', '{condition}', {mileage}, '{cc_rating}', 0);""")
             connection.commit()
-            emp_id = getEmpId(emp_name)
+            emp_id = findASalesPerson() #getEmpId(emp_name)
             
             #Using Sql sp stored procedure And Transcation
-            if markup_percent < 0:
-                value = import_price_usd * markup_percent
+            if int(markup_percent) > 0:
+                value = markup_percent/100
+            else:
+                value = markup_percent
+                
+            
             cursor.execute(f"""EXEC DrautoshopAddb.dbo.sp_INSERT_EMP_PURCHASE
                            '{chassis_number}', '{emp_id}', GETDATE(), '{value}', '{import_price_usd}' """)
             connection.commit()
@@ -186,8 +190,29 @@ def update_vehicle(requests, chassis_number, make, import_price_usd, car_year,
     return redirect('/')
 
 
-def car_update(requests):
+def car_update(chassis_number,seating_capacity):
+    
+    with connection.cursor() as cursor:
+        cursor.execute(f"""INSERT INTO DrautoshopAddb.dbo.Car (chassis_number, seat_capacity) VALUES('{chassis_number}', {seating_capacity});""")
+        connection.commit()
     return redirect('/')
+
+def van_update(chassis_number,haul_capacity,maxlength_clearance):
+    with connection.cursor() as cursor:
+        cursor.execute(f""" INSERT INTO DrautoshopAddb.dbo.Van
+                       (chassis_number, haul_capacity, max_clearance) 
+                       VALUES('{chassis_number}',{haul_capacity} , {maxlength_clearance});""")
+        connection.commit()
+    return redirect("/")
+
+def fwd_update(chassis_number,vehicle_size,fuel_type):
+    with connection.cursor() as cursor:
+        cursor.execute(f"""INSERT INTO DrautoshopAddb.dbo.Four_WD 
+                       (chassis_number, vehicle_size, fuel_type)
+                       VALUES('{chassis_number}', {vehicle_size}, '{fuel_type}');
+                        """)
+        connection.commit()
+    return redirect("/")
 
 
 #### WORK Done Functions

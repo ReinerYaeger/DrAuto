@@ -4,8 +4,8 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.db import connection
 from datetime import datetime
-from drauto.backend_functions import  addon_update, assign_supervisor, authenticate_staff_login, findASalesPerson, findClient, generate_primarykey, getDiscountPrice, getPrice, part_change_update, register_client, repair_update, \
-    update_employee, update_mechanic, update_salesman, update_vehicle, car_update, authenticate_client_login
+from drauto.backend_functions import  addon_update, assign_supervisor, authenticate_staff_login, findASalesPerson, findClient, fwd_update, generate_primarykey, getDiscountPrice, getPrice, part_change_update, register_client, repair_update, \
+    update_employee, update_mechanic, update_salesman, update_vehicle, car_update, authenticate_client_login, van_update
 from drauto.forms import EmployeeLoginForm, EmployeeUpdateForm
 from drauto.models import Employee
 from django.contrib.auth.decorators import login_required
@@ -194,13 +194,18 @@ def admin_views(requests):
                                 LEFT JOIN Repair R ON wd.work_done_id = R.work_done_id;""")
         work_done_list = cursor.fetchall()
         print(work_done_list)
+        
+        cursor.execute("EXEC get_top_selling_make")
+        top_selling_list = cursor.fetchall()
+        print(top_selling_list)
 
     context = {'sales_list': sales_list,
                'commission_list': commission_list,
                'client_purchase_list': client_purchase_list,
                'salesman_purchase_list': salesman_purchase_list,
                'invoice_list': invoice_list, 
-               "work_done_list":work_done_list}
+               "work_done_list":work_done_list,
+               "top_selling_list":top_selling_list }
 
     print(context)
     return render(requests, 'drauto/admin_page.html', context)
@@ -353,7 +358,21 @@ def admin_control_vehicle(requests, emp_name):
                            mileage, cc_rating,emp_name)
 
         if 'car_update' in requests.POST:
-            car_update()
+            chassis_number = requests.POST['chassis_number']
+            seating_capacity = requests.POST['seating_capacity']
+            car_update(chassis_number,seating_capacity)
+            
+        if 'fwd_update' in requests.POST:
+            chassis_number = requests.POST['chassis_number']
+            vehicle_size = requests.POST['vehicle_size']
+            fuel_type = requests.POST['fuel_type']
+            fwd_update(chassis_number,vehicle_size,fuel_type)
+            
+        if 'van_update' in requests.POST:
+            chassis_number = requests.POST['chassis_number']
+            haul_capacity = requests.POST['haul_capacity']
+            maxlength_clearance = requests.POST['maxlength_clearance']
+            van_update(chassis_number,haul_capacity,maxlength_clearance)
 
     context = {'vehicle_list': vehicle_list,
                'van_list': van_list,
