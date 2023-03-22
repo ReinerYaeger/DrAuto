@@ -133,7 +133,7 @@ def purchase(requests, vehicle_id):
         price = vehicle.get('price')
         chassis_number = vehicle.get('chassis_number')
         emp_id = findASalesPerson()
-        commission = .15
+        commission = (.15*price)+ price
 
         # storing loging purchase
 
@@ -198,6 +198,10 @@ def admin_views(requests):
         cursor.execute("EXEC get_top_selling_make")
         top_selling_list = cursor.fetchall()
         print(top_selling_list)
+        
+        cursor.execute("EXEC sp_GetEmployeePerformance")
+        emp_performance = cursor.fetchall()
+        print(emp_performance)
 
     context = {'sales_list': sales_list,
                'commission_list': commission_list,
@@ -205,7 +209,8 @@ def admin_views(requests):
                'salesman_purchase_list': salesman_purchase_list,
                'invoice_list': invoice_list, 
                "work_done_list":work_done_list,
-               "top_selling_list":top_selling_list }
+               "top_selling_list":top_selling_list,
+               "emp_performance":emp_performance,}
 
     print(context)
     return render(requests, 'drauto/admin_page.html', context)

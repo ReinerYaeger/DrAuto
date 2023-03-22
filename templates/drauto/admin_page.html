@@ -102,6 +102,26 @@
     </tbody>
 </table>
 
+<h3>Employeee Performance</h3>
+<table class="table table-striped">
+    <thead class="thead-dark">
+    <tr>
+        <th>Employee Name</th>
+        <th>Number of Sales </th>
+        <th>Total Comission</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for perform in emp_performance %}
+        <tr>
+            <td>{{ perform.0 }}</td>
+            <td>{{ perform.1 }}</td>
+            <td>{{ perform.2 }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
 <h3>Vehicles Bought By Employee</h3>
 <table class="table table-striped">
     <thead class="thead-dark">
