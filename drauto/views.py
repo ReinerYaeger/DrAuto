@@ -100,6 +100,7 @@ def purchase(requests, vehicle_id):
         for v in vehicle_list:
             if v[0] == vehicle_id:
                 # Store the values for the corresponding column names
+                #Using Sql function
                 vehicle = {
                     'chassis_number': v[0],
                     'make': v[1],

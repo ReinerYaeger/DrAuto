@@ -177,13 +177,23 @@ def update_vehicle(requests, chassis_number, make, import_price_usd, car_year,
             
             #Using Sql sp stored procedure And Transcation
             if int(markup_percent) > 0:
-                value = markup_percent/100
+                value = int(markup_percent)/100
             else:
-                value = markup_percent
-                
-            
-            cursor.execute(f"""EXEC DrautoshopAddb.dbo.sp_INSERT_EMP_PURCHASE
-                           '{chassis_number}', '{emp_id}', GETDATE(), '{value}', '{import_price_usd}' """)
+                value = int(markup_percent)
+
+            cursor.execute(f"""    INSERT
+                INTO
+                DrautoshopAddb.dbo.Emp_Purchase
+                (purchase_id, chassis_number, emp_Id, date_sold, vehicle_value, price)
+                VALUES('{generate_primarykey("EP")}','{chassis_number}', '{emp_id}', GETDATE(), {float(value)}, {float(import_price_usd)});""")
+
+            # cursor.execute(f"""EXEC DrautoshopAddb.dbo.sp_INSERT_EMP_PURCHASE
+            #                '{chassis_number}', '{emp_id}', GETDATE(), '{value}', '{import_price_usd}' """)
+
+            # query = "EXEC DrautoshopAddb.dbo.sp_INSERT_EMP_PURCHASE @chassis_number=?, @emp_id=?, @date_bought=GETDATE(), @vehicle_value=?, @price=?"
+            # values = (chassis_number, emp_id, value, import_price_usd)
+            # cursor.execute(query, values)
+
             connection.commit()
             return redirect('/')
 
